@@ -24,6 +24,242 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
+# Custom CSS for Groq Cloud styling
+st.markdown("""
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+    
+    /* Dark theme base */
+    .stApp {
+        background-color: #0f0f0f !important;
+        color: #ffffff !important;
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif !important;
+    }
+    
+    /* Main content area */
+    .main .block-container {
+        background-color: #0f0f0f !important;
+        padding-top: 2rem !important;
+        padding-bottom: 2rem !important;
+        max-width: 100% !important;
+    }
+    
+    /* Sidebar styling */
+    .css-1d391kg, .css-1cypcdb {
+        background-color: #1a1a1a !important;
+        border-right: 1px solid #333333 !important;
+    }
+    
+    /* Headers */
+    h1, h2, h3, h4, h5, h6 {
+        font-family: 'Inter', sans-serif !important;
+        color: #ffffff !important;
+        font-weight: 600 !important;
+        margin-bottom: 1rem !important;
+    }
+    
+    h1 {
+        font-size: 2rem !important;
+        font-weight: 700 !important;
+        margin-bottom: 0.5rem !important;
+    }
+    
+    h2 {
+        font-size: 1.25rem !important;
+        font-weight: 600 !important;
+        color: #e5e5e5 !important;
+    }
+    
+    /* Text styling */
+    .stMarkdown, .stText, p, span, div {
+        font-family: 'Inter', sans-serif !important;
+        color: #e5e5e5 !important;
+        font-size: 14px !important;
+        line-height: 1.5 !important;
+    }
+    
+    /* Input fields */
+    .stTextInput > div > div > input,
+    .stTextArea > div > div > textarea {
+        background-color: #262626 !important;
+        border: 1px solid #404040 !important;
+        border-radius: 8px !important;
+        color: #ffffff !important;
+        font-family: 'Inter', sans-serif !important;
+        font-size: 14px !important;
+        padding: 12px 16px !important;
+    }
+    
+    .stTextInput > div > div > input:focus,
+    .stTextArea > div > div > textarea:focus {
+        border-color: #f55036 !important;
+        box-shadow: 0 0 0 2px rgba(245, 80, 54, 0.2) !important;
+    }
+    
+    /* Buttons */
+    .stButton > button {
+        background-color: #f55036 !important;
+        color: #ffffff !important;
+        border: none !important;
+        border-radius: 8px !important;
+        font-family: 'Inter', sans-serif !important;
+        font-size: 14px !important;
+        font-weight: 500 !important;
+        padding: 8px 16px !important;
+        transition: all 0.2s ease !important;
+    }
+    
+    .stButton > button:hover {
+        background-color: #e04832 !important;
+        transform: translateY(-1px) !important;
+    }
+    
+    /* Secondary buttons */
+    .stButton > button[kind="secondary"] {
+        background-color: transparent !important;
+        border: 1px solid #404040 !important;
+        color: #e5e5e5 !important;
+    }
+    
+    .stButton > button[kind="secondary"]:hover {
+        background-color: #262626 !important;
+        border-color: #666666 !important;
+    }
+    
+    /* File uploader */
+    .stFileUploader {
+        background-color: #1a1a1a !important;
+        border: 2px dashed #404040 !important;
+        border-radius: 8px !important;
+        padding: 2rem !important;
+    }
+    
+    .stFileUploader label {
+        color: #e5e5e5 !important;
+        font-family: 'Inter', sans-serif !important;
+    }
+    
+    /* Expander */
+    .streamlit-expanderHeader {
+        background-color: #1a1a1a !important;
+        border: 1px solid #333333 !important;
+        border-radius: 8px !important;
+        color: #ffffff !important;
+        font-family: 'Inter', sans-serif !important;
+        font-weight: 500 !important;
+        padding: 12px 16px !important;
+    }
+    
+    .streamlit-expanderContent {
+        background-color: #1a1a1a !important;
+        border: 1px solid #333333 !important;
+        border-top: none !important;
+        border-radius: 0 0 8px 8px !important;
+        padding: 16px !important;
+    }
+    
+    /* Chat messages */
+    .stChatMessage {
+        background-color: #1a1a1a !important;
+        border: 1px solid #333333 !important;
+        border-radius: 12px !important;
+        margin-bottom: 1rem !important;
+        padding: 16px !important;
+    }
+    
+    .stChatMessage .stMarkdown {
+        color: #e5e5e5 !important;
+    }
+    
+    /* Success/Error/Info messages */
+    .stSuccess {
+        background-color: rgba(34, 197, 94, 0.1) !important;
+        border: 1px solid #22c55e !important;
+        color: #22c55e !important;
+    }
+    
+    .stError {
+        background-color: rgba(239, 68, 68, 0.1) !important;
+        border: 1px solid #ef4444 !important;
+        color: #ef4444 !important;
+    }
+    
+    .stInfo {
+        background-color: rgba(59, 130, 246, 0.1) !important;
+        border: 1px solid #3b82f6 !important;
+        color: #3b82f6 !important;
+    }
+    
+    /* Dividers */
+    hr {
+        border: none !important;
+        height: 1px !important;
+        background-color: #333333 !important;
+        margin: 2rem 0 !important;
+    }
+    
+    /* Sidebar content */
+    .css-1d391kg .stMarkdown,
+    .css-1cypcdb .stMarkdown {
+        color: #e5e5e5 !important;
+    }
+    
+    /* Code blocks */
+    .stCode {
+        background-color: #262626 !important;
+        border: 1px solid #404040 !important;
+        border-radius: 8px !important;
+        color: #e5e5e5 !important;
+        font-family: 'JetBrains Mono', 'Fira Code', monospace !important;
+    }
+    
+    /* Selectbox */
+    .stSelectbox > div > div {
+        background-color: #262626 !important;
+        border: 1px solid #404040 !important;
+        border-radius: 8px !important;
+        color: #ffffff !important;
+    }
+    
+    /* Progress bars */
+    .stProgress .st-bo {
+        background-color: #f55036 !important;
+    }
+    
+    /* Metric cards */
+    .metric-container {
+        background-color: #1a1a1a !important;
+        border: 1px solid #333333 !important;
+        border-radius: 8px !important;
+        padding: 16px !important;
+    }
+    
+    /* Hide Streamlit branding */
+    #MainMenu {visibility: hidden;}
+    footer {visibility: hidden;}
+    header {visibility: hidden;}
+    
+    /* Custom scrollbar */
+    ::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+    }
+    
+    ::-webkit-scrollbar-track {
+        background: #1a1a1a;
+    }
+    
+    ::-webkit-scrollbar-thumb {
+        background: #404040;
+        border-radius: 4px;
+    }
+    
+    ::-webkit-scrollbar-thumb:hover {
+        background: #666666;
+    }
+</style>
+""", unsafe_allow_html=True)
+
 # Initialize services
 @st.cache_resource
 def init_services():
@@ -147,7 +383,7 @@ def main():
                     st.error(f"❌ Error processing document: {str(e)}")
 
         # Document Management Section
-        with st.expander("Your Documents", expanded=True):
+        with st.expander("Your Documents", expanded=False):
             
             # Manual refresh button
             if st.button("Refresh Document List"):
