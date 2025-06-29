@@ -10,4 +10,12 @@ pandas>=2.1.0
 PyPDF2>=3.0.0
 python-magic>=0.4.27
 langchain>=0.1.0
-langchain-community>=0.0.10 
+langchain-community>=0.0.10
+
+# Testing dependencies
+pytest>=7.4.0
+pytest-asyncio>=0.21.0
+pytest-cov>=4.1.0
+pytest-mock>=3.11.0
+coverage>=7.2.0
+responses>=0.23.0 
