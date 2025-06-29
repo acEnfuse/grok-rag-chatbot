@@ -75,11 +75,11 @@ async def get_chat_response(message, milvus_service, groq_service):
     """Get response from the RAG system"""
     try:
         # Search for relevant documents (embedding model loads here if first time)
-        with st.spinner("🔍 Searching knowledge base..."):
+        with st.spinner("Searching knowledge base..."):
             relevant_docs = await milvus_service.search_documents(message)
         
         # Generate response using Groq
-        with st.spinner("🤖 Generating response..."):
+        with st.spinner("Generating response..."):
             response = await groq_service.generate_response(
                 query=message,
                 context_docs=relevant_docs,
@@ -103,7 +103,7 @@ def load_documents_safely(milvus_service):
         return []
 
 def main():
-    st.title("🤖 RAG Chatbot")
+    st.title("RAG Chatbot")
     st.markdown("Upload documents and chat with your knowledge base!")
     
     # Initialize session state
@@ -112,7 +112,7 @@ def main():
     # Initialize services
     try:
         milvus_service, groq_service, document_processor = init_services()
-        st.success("🚀 Services initialized successfully!")
+        st.success("Services initialized successfully!")
     except Exception as e:
         st.error(f"Failed to initialize services: {e}")
         st.stop()
@@ -122,7 +122,7 @@ def main():
     
     # Sidebar for document management
     with st.sidebar:
-        st.header("📄 Document Management")
+        st.header("Document Management")
         
         # File upload
         uploaded_file = st.file_uploader(
@@ -137,7 +137,7 @@ def main():
                     chunks_count, result = asyncio.run(
                         process_uploaded_file(uploaded_file, document_processor, milvus_service)
                     )
-                    st.success(f"✅ Successfully processed {uploaded_file.name}")
+                    st.success(f"Successfully processed {uploaded_file.name}")
                     st.info(f"Added {chunks_count} chunks to the knowledge base")
                     
                     # Refresh document list
@@ -147,15 +147,15 @@ def main():
                     st.error(f"❌ Error processing document: {str(e)}")
 
         # Document Management Section
-        with st.expander("📄 Your Documents", expanded=True):
+        with st.expander("Your Documents", expanded=True):
             
             # Manual refresh button
-            if st.button("🔄 Refresh Document List"):
+            if st.button("Refresh Document List"):
                 st.session_state.documents = load_documents_safely(milvus_service)
                 if st.session_state.documents:
-                    st.success(f"✅ Found {len(st.session_state.documents)} document(s)")
+                    st.success(f"Found {len(st.session_state.documents)} document(s)")
                 else:
-                    st.info("📝 No documents found in collection")
+                    st.info("No documents found in collection")
                 st.rerun()
             
             # List documents with delete option
@@ -163,7 +163,7 @@ def main():
                 for doc in st.session_state.documents:
                     col_doc, col_del = st.columns([5, 1])
                     with col_doc:
-                        st.write(f"📄 **{doc['filename']}**")
+                        st.write(f"**{doc['filename']}**")
                     with col_del:
                         # Check if this document is in "delete confirmation" mode
                         delete_key = f"delete_confirm_{doc['filename']}"
@@ -171,41 +171,46 @@ def main():
                             # Show confirmation buttons
                             col_confirm, col_cancel = st.columns(2)
                             with col_confirm:
-                                if st.button("✅", key=f"confirm_{doc['filename']}", help="Confirm delete"):
+                                if st.button("Confirm", key=f"confirm_{doc['filename']}", help="Confirm delete"):
                                     try:
                                         asyncio.run(milvus_service.delete_document(doc['filename']))
-                                        st.success(f"✅ Deleted {doc['filename']}")
+                                        st.success(f"Deleted {doc['filename']}")
                                         # Clear confirmation state and refresh
                                         if delete_key in st.session_state:
                                             del st.session_state[delete_key]
                                         st.session_state.documents = asyncio.run(milvus_service.list_documents())
                                         st.rerun()
                                     except Exception as e:
-                                        st.error(f"❌ Error: {str(e)}")
+                                        st.error(f"Error: {str(e)}")
                                         if delete_key in st.session_state:
                                             del st.session_state[delete_key]
                             with col_cancel:
-                                if st.button("❌", key=f"cancel_{doc['filename']}", help="Cancel delete"):
+                                if st.button("Cancel", key=f"cancel_{doc['filename']}", help="Cancel delete"):
                                     # Clear confirmation state
                                     if delete_key in st.session_state:
                                         del st.session_state[delete_key]
                                     st.rerun()
                         else:
                             # Show delete button
-                            if st.button("🗑️", key=f"del_{doc['filename']}", help=f"Delete {doc['filename']}"):
+                            if st.button("Delete", key=f"del_{doc['filename']}", help=f"Delete {doc['filename']}"):
                                 # Set confirmation state
                                 st.session_state[delete_key] = True
                                 st.rerun()
             else:
-                st.info("📝 No documents uploaded yet. Upload a document above to get started!")
+                st.info("No documents uploaded yet. Upload a document above to get started!")
         
         # Clear chat button
-        if st.button("🗑️ Clear Chat History"):
+        if st.button("Clear Chat History"):
             st.session_state.messages = []
             st.rerun()
+        
+        # Powered by Groq footer
+        st.markdown("---")
+        st.markdown("**Powered by**")
+        st.image("assets/Groq_logo.svg", width=120)
     
     # Main chat interface
-    st.header("💬 Chat")
+    st.header("Chat")
     
     # Display chat messages
     for message in st.session_state.messages:
@@ -215,7 +220,7 @@ def main():
             # Display sources for assistant messages
             if message["role"] == "assistant" and "sources" in message:
                 if message["sources"]:
-                    with st.expander("📖 Sources", expanded=False):
+                    with st.expander("Sources", expanded=False):
                         for i, source in enumerate(message["sources"]):
                             st.markdown(f"**{source['filename']}** (Score: {source['score']:.3f})")
                             st.markdown(f"_{source['content']}_")
@@ -242,7 +247,7 @@ def main():
                 
                 # Display sources
                 if sources:
-                    with st.expander("📖 Sources", expanded=False):
+                    with st.expander("Sources", expanded=False):
                         for i, source in enumerate(sources):
                             st.markdown(f"**{source['filename']}** (Score: {source['score']:.3f})")
                             st.markdown(f"_{source['text'][:300]}..._")
