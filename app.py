@@ -348,6 +348,29 @@ st.markdown("""
         overflow: hidden !important;
     }
     
+    /* Fix sidebar collapse button with proper Material Icon */
+    [data-testid="stSidebarCollapseButton"] [data-testid="stIconMaterial"] {
+        font-family: 'Material Icons' !important;
+        font-size: 0 !important;
+        color: transparent !important;
+        text-indent: -9999px !important;
+        position: relative !important;
+        width: 24px !important;
+        height: 24px !important;
+    }
+    
+    [data-testid="stSidebarCollapseButton"] [data-testid="stIconMaterial"]:before {
+        content: "chevron_left" !important;
+        position: absolute !important;
+        top: 50% !important;
+        left: 50% !important;
+        transform: translate(-50%, -50%) !important;
+        font-family: 'Material Icons' !important;
+        font-size: 20px !important;
+        color: rgba(250, 250, 250, 0.6) !important;
+        text-indent: 0 !important;
+    }
+    
     /* Hide any span/div that might contain the fallback text */
     span[style*="font-family"][style*="material"] {
         text-indent: -9999px !important;
