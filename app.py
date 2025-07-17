@@ -28,12 +28,43 @@ st.set_page_config(
 st.markdown("""
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+    @import url('https://fonts.googleapis.com/icon?family=Material+Icons');
     
     /* Dark theme base */
     .stApp {
         background-color: #0f0f0f !important;
         color: #ffffff !important;
         font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif !important;
+    }
+    
+    /* Replace the sidebar collapse button icon with a working one */
+    [data-testid="stSidebarCollapseButton"] [data-testid="stIconMaterial"] {
+        font-family: 'Material Icons' !important;
+        font-size: 24px !important;
+        width: 24px !important;
+        height: 24px !important;
+    }
+    
+    /* Replace the problematic icon text with a better symbol */
+    [data-testid="stSidebarCollapseButton"] [data-testid="stIconMaterial"]:before {
+        content: "chevron_left" !important;
+        font-family: 'Material Icons' !important;
+        font-size: 24px !important;
+        color: rgba(250, 250, 250, 0.6) !important;
+    }
+    
+    /* Hide the fallback text */
+    [data-testid="stSidebarCollapseButton"] [data-testid="stIconMaterial"] {
+        font-size: 0 !important;
+        color: transparent !important;
+        text-indent: -9999px !important;
+    }
+    
+    /* Ensure the icon displays properly */
+    [data-testid="stSidebarCollapseButton"] {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
     }
     
     /* Main content area */
@@ -48,6 +79,10 @@ st.markdown("""
     .css-1d391kg, .css-1cypcdb {
         background-color: #1a1a1a !important;
         border-right: 1px solid #333333 !important;
+        width: 350px !important;
+        min-width: 350px !important;
+        max-width: 350px !important;
+        overflow: visible !important;
     }
     
     /* Headers */
@@ -126,6 +161,46 @@ st.markdown("""
         border-color: #666666 !important;
     }
     
+    /* Remove column styling since we're now using vertical stacking */
+    .stButton {
+        width: 100% !important;
+        margin: 1px 0 !important;
+    }
+    
+    .stButton > button {
+        width: 100% !important;
+        margin: 1px 0 !important;
+        font-size: 14px !important;
+        padding: 8px 16px !important;
+    }
+    
+    /* Specific styling for confirm buttons (green) */
+    button[title*="Confirm"], 
+    button[aria-label*="Confirm"] {
+        background-color: #22c55e !important;
+        color: #ffffff !important;
+        border: none !important;
+    }
+    
+    button[title*="Confirm"]:hover, 
+    button[aria-label*="Confirm"]:hover {
+        background-color: #16a34a !important;
+    }
+    
+    /* Specific styling for cancel buttons (gray) */
+    button[title*="Cancel"], 
+    button[aria-label*="Cancel"] {
+        background-color: transparent !important;
+        border: 1px solid #666666 !important;
+        color: #e5e5e5 !important;
+    }
+    
+    button[title*="Cancel"]:hover, 
+    button[aria-label*="Cancel"]:hover {
+        background-color: #374151 !important;
+        border-color: #9ca3af !important;
+    }
+    
     /* File uploader */
     .stFileUploader {
         background-color: #1a1a1a !important;
@@ -202,6 +277,10 @@ st.markdown("""
     .css-1d391kg .stMarkdown,
     .css-1cypcdb .stMarkdown {
         color: #e5e5e5 !important;
+        width: 100% !important;
+        overflow: visible !important;
+        text-overflow: clip !important;
+        white-space: normal !important;
     }
     
     /* Code blocks */
@@ -239,6 +318,52 @@ st.markdown("""
     footer {visibility: hidden;}
     header {visibility: hidden;}
     
+    /* Fix the stLogoSpacer that might be causing text cutoff */
+    [data-testid="stLogoSpacer"] {
+        height: 0 !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        display: none !important;
+    }
+    
+    /* Additional Streamlit spacing fixes */
+    .st-emotion-cache-11ukie {
+        height: 0 !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        display: none !important;
+    }
+    
+    /* Target and hide Material Design icon fallback text specifically */
+    /* Hide elements with keyboard arrow attributes */
+    [title*="keyboard_double_arrow"],
+    [aria-label*="keyboard_double_arrow"],
+    [data-icon*="keyboard_double_arrow"],
+    [class*="keyboard_double_arrow"] {
+        font-size: 0 !important;
+        color: transparent !important;
+        text-indent: -9999px !important;
+        width: 0 !important;
+        height: 0 !important;
+        overflow: hidden !important;
+    }
+    
+    /* Hide any span/div that might contain the fallback text */
+    span[style*="font-family"][style*="material"] {
+        text-indent: -9999px !important;
+        color: transparent !important;
+    }
+    
+    /* Ensure sidebar content doesn't get cut off */
+    .css-1d391kg .stMarkdown,
+    .css-1cypcdb .stMarkdown {
+        width: 100% !important;
+        overflow: visible !important;
+        word-wrap: break-word !important;
+        padding-left: 0 !important;
+        margin-left: 0 !important;
+    }
+    
     /* Custom scrollbar */
     ::-webkit-scrollbar {
         width: 8px;
@@ -256,6 +381,23 @@ st.markdown("""
     
     ::-webkit-scrollbar-thumb:hover {
         background: #666666;
+    }
+
+    /* Replace the sidebar collapse button with a simple CSS arrow */
+    [data-testid="stSidebarCollapseButton"] [data-testid="stIconMaterial"] {
+        font-size: 0 !important;
+        color: transparent !important;
+        text-indent: -9999px !important;
+        position: relative !important;
+        width: 24px !important;
+        height: 24px !important;
+    }
+    
+    [data-testid="stSidebarCollapseButton"] [data-testid="stIconMaterial"]:before {
+        content: "‹" !important;
+        font-size: 20px !important;
+        color: rgba(250, 250, 250, 0.6) !important;
+        font-weight: bold !important;
     }
 </style>
 """, unsafe_allow_html=True)
@@ -294,7 +436,7 @@ async def process_uploaded_file(file, document_processor, milvus_service):
             chunks = await document_processor.process_document(temp_path, file.name)
             
             # Store in Milvus (embedding model loads here if first time)
-            with st.spinner("🧠 Loading AI model (first time only)..."):
+            with st.spinner("Loading AI model (first time only)..."):
                 result = await milvus_service.add_documents(chunks)
             
             # Clean up temp file
@@ -404,28 +546,25 @@ def main():
                         # Check if this document is in "delete confirmation" mode
                         delete_key = f"delete_confirm_{doc['filename']}"
                         if delete_key in st.session_state and st.session_state[delete_key]:
-                            # Show confirmation buttons
-                            col_confirm, col_cancel = st.columns(2)
-                            with col_confirm:
-                                if st.button("Confirm", key=f"confirm_{doc['filename']}", help="Confirm delete"):
-                                    try:
-                                        asyncio.run(milvus_service.delete_document(doc['filename']))
-                                        st.success(f"Deleted {doc['filename']}")
-                                        # Clear confirmation state and refresh
-                                        if delete_key in st.session_state:
-                                            del st.session_state[delete_key]
-                                        st.session_state.documents = asyncio.run(milvus_service.list_documents())
-                                        st.rerun()
-                                    except Exception as e:
-                                        st.error(f"Error: {str(e)}")
-                                        if delete_key in st.session_state:
-                                            del st.session_state[delete_key]
-                            with col_cancel:
-                                if st.button("Cancel", key=f"cancel_{doc['filename']}", help="Cancel delete"):
-                                    # Clear confirmation state
+                            # Show confirmation buttons - stacked vertically (Cancel on top, Confirm below)
+                            if st.button("Cancel", key=f"cancel_{doc['filename']}", help="Cancel delete"):
+                                # Clear confirmation state
+                                if delete_key in st.session_state:
+                                    del st.session_state[delete_key]
+                                st.rerun()
+                            if st.button("Confirm", key=f"confirm_{doc['filename']}", help="Confirm delete"):
+                                try:
+                                    asyncio.run(milvus_service.delete_document(doc['filename']))
+                                    st.success(f"Deleted {doc['filename']}")
+                                    # Clear confirmation state and refresh
                                     if delete_key in st.session_state:
                                         del st.session_state[delete_key]
+                                    st.session_state.documents = asyncio.run(milvus_service.list_documents())
                                     st.rerun()
+                                except Exception as e:
+                                    st.error(f"Error: {str(e)}")
+                                    if delete_key in st.session_state:
+                                        del st.session_state[delete_key]
                         else:
                             # Show delete button
                             if st.button("Delete", key=f"del_{doc['filename']}", help=f"Delete {doc['filename']}"):
@@ -445,8 +584,6 @@ def main():
         st.markdown("**Powered by**")
         st.image("assets/Groq_logo.svg", width=120)
     
-    # Main chat interface
-    st.header("Chat")
     
     # Display chat messages
     for message in st.session_state.messages:
