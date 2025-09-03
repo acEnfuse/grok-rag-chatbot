@@ -10,13 +10,150 @@ class GroqService:
         self.client = AsyncGroq(api_key=os.getenv("GROQ_API_KEY"))
         self.model = "llama-3.3-70b-versatile"  # Updated to latest production model
     
+    async def generate_job_matching_response(
+        self, 
+        cv_data: Dict[str, Any], 
+        matched_jobs: List[Dict[str, Any]], 
+        chat_history: List[Dict[str, str]] = None
+    ) -> str:
+        """Generate a job matching response using Groq with CV and job data"""
+        try:
+            # Prepare CV summary
+            cv_summary = self._prepare_cv_summary(cv_data)
+            
+            # Prepare job matches
+            jobs_context = self._prepare_jobs_context(matched_jobs)
+            
+            # Prepare chat history
+            messages = []
+            
+            # System prompt for job matching
+            system_prompt = """You are an AI career advisor for the Human Resources and Social Development (HRSD) ministry of Saudi Arabia. Your role is to help job seekers find suitable employment opportunities based on their CV and the available job positions.
+
+Guidelines:
+- Analyze the candidate's CV and match it with available job opportunities
+- Provide detailed explanations for why each job is a good match
+- Include match percentages and specific reasons for the match
+- Be encouraging and professional in your tone
+- Focus on skills alignment, experience level, and career growth potential
+- Provide actionable advice for improving job prospects
+- Always maintain a supportive and helpful tone"""
+            
+            messages.append({"role": "system", "content": system_prompt})
+            
+            # Add recent chat history for context
+            if chat_history:
+                for msg in chat_history[-4:]:  # Last 4 messages for context
+                    messages.append({
+                        "role": msg["role"],
+                        "content": msg["content"]
+                    })
+            
+            # Add current analysis request
+            user_message = f"""Please analyze this candidate's CV and provide job matching recommendations:
+
+CANDIDATE CV SUMMARY:
+{cv_summary}
+
+AVAILABLE JOB OPPORTUNITIES:
+{jobs_context}
+
+Please provide:
+1. A brief summary of the candidate's profile
+2. Top 3-5 job matches with detailed explanations
+3. Match percentages and specific reasons for each match
+4. Suggestions for improving job prospects
+5. Any additional career advice
+
+Format your response in a clear, professional manner suitable for a government career counseling service."""
+            
+            messages.append({"role": "user", "content": user_message})
+            
+            # Generate response
+            response = await self.client.chat.completions.create(
+                model=self.model,
+                messages=messages,
+                max_tokens=2048,
+                temperature=0.3,
+                top_p=0.9
+            )
+            
+            return response.choices[0].message.content
+            
+        except Exception as e:
+            logger.error(f"Error generating job matching response with Groq: {e}")
+            raise
+    
+    def _prepare_cv_summary(self, cv_data: Dict[str, Any]) -> str:
+        """Prepare a summary of CV data for the AI"""
+        summary_parts = []
+        
+        # Personal info
+        if cv_data.get('personal_info', {}).get('name'):
+            summary_parts.append(f"Name: {cv_data['personal_info']['name']}")
+        
+        # Skills
+        if cv_data.get('skills'):
+            skills_str = ", ".join(cv_data['skills'][:10])  # Top 10 skills
+            summary_parts.append(f"Skills: {skills_str}")
+        
+        # Experience
+        if cv_data.get('experience'):
+            exp_summary = []
+            for exp in cv_data['experience'][:3]:  # Top 3 experiences
+                if exp.get('title'):
+                    exp_summary.append(exp['title'])
+            if exp_summary:
+                summary_parts.append(f"Recent Experience: {', '.join(exp_summary)}")
+        
+        # Education
+        if cv_data.get('education'):
+            edu_summary = []
+            for edu in cv_data['education'][:2]:  # Top 2 education entries
+                if edu.get('institution'):
+                    edu_summary.append(edu['institution'])
+            if edu_summary:
+                summary_parts.append(f"Education: {', '.join(edu_summary)}")
+        
+        # Contact
+        if cv_data.get('contact', {}).get('email'):
+            summary_parts.append(f"Email: {cv_data['contact']['email']}")
+        
+        # Raw text summary
+        if cv_data.get('summary'):
+            summary_parts.append(f"CV Summary: {cv_data['summary']}")
+        
+        return "\n".join(summary_parts) if summary_parts else "CV data not available"
+    
+    def _prepare_jobs_context(self, matched_jobs: List[Dict[str, Any]]) -> str:
+        """Prepare job matches context for the AI"""
+        if not matched_jobs:
+            return "No job matches found."
+        
+        jobs_context = []
+        for i, job in enumerate(matched_jobs[:5], 1):  # Top 5 jobs
+            job_info = f"""
+Job {i}:
+- Title: {job.get('job_title', 'N/A')}
+- Company: {job.get('company', 'N/A')}
+- Match Score: {job.get('match_score', 0)}%
+- Description: {job.get('description', 'N/A')[:200]}...
+- Required Skills: {job.get('required_skills', 'N/A')}
+- Experience Level: {job.get('experience_level', 'N/A')}
+- Location: {job.get('location', 'N/A')}
+- Salary: {job.get('salary_range', 'N/A')}
+"""
+            jobs_context.append(job_info)
+        
+        return "\n".join(jobs_context)
+    
     async def generate_response(
         self, 
         query: str, 
         context_docs: List[Dict[str, Any]], 
         chat_history: List[Dict[str, str]] = None
     ) -> str:
-        """Generate a response using Groq with RAG context"""
+        """Generate a response using Groq with RAG context (legacy method)"""
         try:
             # Prepare context from retrieved documents
             context = ""
