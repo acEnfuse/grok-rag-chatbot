@@ -70,12 +70,12 @@ const FileUpload = ({ onFileUpload, loading }) => {
         <input {...getInputProps()} disabled={loading} />
         
         {loading ? (
-          <div>
-            <div className="spinner mx-auto mb-6"></div>
-            <p className="text-xl font-medium text-gray-600">
+          <div className="flex flex-col items-center p-8" style={{paddingTop: '40px'}}>
+            <div className="spinner mb-6"></div>
+            <p className="text-xl font-medium text-gray-600 text-center">
               Processing your CV...
             </p>
-            <p className="text-sm text-gray-500 mt-2">
+            <p className="text-sm text-gray-500 mt-2 text-center">
               This may take a few moments
             </p>
           </div>

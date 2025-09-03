@@ -19,8 +19,9 @@ const JobMatches = ({ matches, cvData }) => {
       {matches && matches.length > 0 ? (
         <div className="space-y-6">
           {matches.map((job, index) => (
-            <div key={job.id || index} className="bg-white rounded-lg shadow p-6">
-              <div className="flex justify-between items-start mb-4">
+            <div key={job.id || index}>
+              <div className="bg-white rounded-lg shadow p-6">
+                <div className="flex justify-between items-start mb-4">
                 <div className="flex-1">
                   <h4 className="text-xl font-semibold text-gray-800 mb-2">
                     {job.job_title || 'Job Title Not Available'}
@@ -88,12 +89,12 @@ const JobMatches = ({ matches, cvData }) => {
                   </div>
                 )}
               </div>
-
-              <div className="pt-4 border-t border-gray-200">
-                <button className="bg-green-800 text-white px-6 py-2 rounded hover:bg-green-700 transition-colors w-full">
-                  Apply for this Position
-                </button>
               </div>
+              {index < matches.length - 1 && (
+                <div className="mt-6 mb-6">
+                  <div style={{backgroundColor: '#10412A', height: '4px', width: '100%'}}></div>
+                </div>
+              )}
             </div>
           ))}
         </div>

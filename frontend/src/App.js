@@ -77,12 +77,16 @@ function App() {
           ) : (
             <div className="max-w-6xl mx-auto">
               <div className="text-center mb-12">
+                <br/>
                 <h3 className="text-3xl font-bold text-gray-800 mb-4">
                   Your Job Matches
                 </h3>
                 <p className="text-lg text-gray-600">
                   Found {jobMatches.length} matching opportunities
                 </p>
+                <div className="mt-6 mb-6">
+                  <div style={{backgroundColor: '#10412A', height: '4px', width: '100%'}}></div>
+                </div>
               </div>
 
               <div className="grid lg:grid-cols-3 gap-8 mb-16">
