@@ -36,7 +36,7 @@ function App() {
   return (
     <div className="min-h-screen bg-green-50">
       {/* Header with HRSD Logo */}
-      <header className="bg-white relative" style={{backgroundColor: 'white', height: '150px !important', display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 20px'}}>
+      <header className="bg-white relative" style={{backgroundColor: 'white', height: '150px !important', display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 90px'}}>
         <img src="/hrsd_logo.svg" alt="HRSD Logo" className="hrsd-logo" style={{marginLeft: '40px'}} />
         <div style={{display: 'flex', alignItems: 'center', gap: '8px', fontSize: '14px', color: '#6B7280'}}>
           <span>Powered by</span>
