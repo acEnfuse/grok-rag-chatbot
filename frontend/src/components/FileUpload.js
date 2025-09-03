@@ -70,7 +70,7 @@ const FileUpload = ({ onFileUpload, loading }) => {
                   Drag & drop your CV here, or click to browse<br/>
                   Supports PDF, DOC, DOCX, and TXT files (max 10MB)
                 </p>
-                <button className="bg-green-800 text-white hover:bg-green-700 transition-colors text-3xl font-bold" style={{color: 'white', padding: '24px 48px', borderRadius: '50px', boxShadow: 'none', border: 'none'}}>
+                <button className="text-white transition-colors text-3xl font-bold" style={{backgroundColor: '#166945', color: 'white', padding: '24px 48px', borderRadius: '50px', boxShadow: 'none', border: 'none'}}>
                   Choose File
                 </button>
               </>
