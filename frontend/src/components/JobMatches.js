@@ -54,7 +54,7 @@ const JobMatches = ({ matches, cvData }) => {
               </div>
 
               <div className="mb-4">
-                <h5 className="font-medium text-gray-800 mb-2">Description</h5>
+                <h5 className="font-medium text-gray-800 mb-2">Description:</h5>
                 <p className="text-gray-600 text-sm leading-relaxed">
                   {job.description || 'No description available'}
                 </p>
@@ -62,12 +62,12 @@ const JobMatches = ({ matches, cvData }) => {
 
               {job.required_skills && (
                 <div className="mb-4">
-                  <h5 className="font-medium text-gray-800 mb-2">Required Skills</h5>
+                  <h5 className="font-medium text-gray-800 mb-2">Required Skills:</h5>
                   <div className="flex flex-wrap gap-2">
                     {job.required_skills.split(',').map((skill, skillIndex) => (
                       <span
                         key={skillIndex}
-                        className="bg-gray-100 text-gray-700 px-2 py-1 rounded text-xs"
+                        className="bg-gray-100 text-gray-700 px-2 py-1 rounded text-xs whitespace-nowrap"
                       >
                         {skill.trim()}
                       </span>

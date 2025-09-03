@@ -98,6 +98,9 @@ function App() {
                 </div>
                 
                 <div>
+                  <div className="mb-6">
+                    <div style={{backgroundColor: '#10412A', height: '4px', width: '100%'}}></div>
+                  </div>
                   <div className="bg-white border border-gray-200 rounded-lg p-6">
                     <h4 className="text-lg font-semibold mb-4 text-gray-800">AI Analysis</h4>
                     <div className="prose max-w-none">
@@ -105,6 +108,7 @@ function App() {
                         {analysis}
                       </pre>
                     </div>
+                    <br/>
                   </div>
                 </div>
               </div>

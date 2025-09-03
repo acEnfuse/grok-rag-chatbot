@@ -130,16 +130,19 @@ async def match_jobs(request: JobMatchRequest):
         # Search for matching jobs
         matched_jobs = await milvus_service.search_jobs(request.cv_text, request.top_k)
         
+        # Format job data to make it more human-readable
+        formatted_jobs = await groq_service.format_job_data(matched_jobs)
+        
         # Process CV data for analysis
         cv_data = await cv_processor.process_cv_from_text(request.cv_text)
         
         # Generate AI analysis
         analysis = await groq_service.generate_job_matching_response(
-            cv_data, matched_jobs
+            cv_data, formatted_jobs
         )
         
         return JobMatchResponse(
-            matches=matched_jobs,
+            matches=formatted_jobs,
             analysis=analysis,
             cv_summary=cv_data
         )

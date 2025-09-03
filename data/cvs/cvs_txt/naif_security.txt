@@ -1,0 +1,78 @@
+NAIF AL-GHAMDI
+Information Security Specialist
+Riyadh, Saudi Arabia
+Phone: +966 52 012 3456
+Email: naif.alghamdi@email.com
+
+PROFESSIONAL SUMMARY
+Cybersecurity professional with 5 years of experience in information security, risk management, and incident response. Expert in protecting organizational assets and implementing comprehensive security frameworks to mitigate cyber threats.
+
+SECURITY EXPERTISE
+• Information Security & Risk Management
+• Cybersecurity Operations & Incident Response
+• Security Architecture & Design
+• Vulnerability Assessment & Penetration Testing
+• Security Policy Development & Implementation
+• Compliance & Regulatory Requirements
+• Security Awareness & Training
+• Network Security & Firewall Management
+• Data Protection & Privacy
+
+TECHNICAL SKILLS
+• Security Tools: SIEM, IDS/IPS, Firewalls, Antivirus
+• Operating Systems: Windows, Linux, Unix
+• Programming: Python, PowerShell, Bash
+• Cloud Security: AWS, Azure, Google Cloud
+• Network Protocols: TCP/IP, HTTP/HTTPS, DNS, VPN
+• Database Security: SQL Server, Oracle, MySQL
+• Encryption & Cryptography
+• Security Frameworks: NIST, ISO 27001, CIS Controls
+
+PROFESSIONAL EXPERIENCE
+
+Senior Information Security Specialist | Technology Company | 2021 - Present
+• Lead cybersecurity operations and incident response team
+• Develop and implement comprehensive security policies and procedures
+• Conduct security risk assessments and vulnerability management
+• Monitor security systems and respond to security incidents
+• Provide security guidance and training to IT teams
+• Reduced security incidents by 60% through proactive measures
+
+Information Security Analyst | Financial Institution | 2019 - 2021
+• Monitored security systems and analyzed security events
+• Conducted vulnerability assessments and penetration testing
+• Investigated security incidents and provided incident response
+• Maintained security documentation and compliance reports
+• Collaborated with IT teams to implement security controls
+• Improved security posture through continuous monitoring
+
+Security Administrator | IT Services Company | 2018 - 2019
+• Managed security tools and systems administration
+• Implemented security policies and access controls
+• Conducted security awareness training for employees
+• Maintained security logs and documentation
+• Assisted with security incident investigations
+• Gained foundational experience in cybersecurity operations
+
+EDUCATION
+Bachelor of Computer Science (Cybersecurity) | King Saud University | 2014 - 2018
+• GPA: 3.7/4.0
+• Relevant Coursework: Network Security, Cryptography, Risk Management, Ethical Hacking
+• Senior Project: "Implementation of Security Information and Event Management System"
+
+CERTIFICATIONS
+• Certified Information Systems Security Professional (CISSP)
+• Certified Ethical Hacker (CEH)
+• CompTIA Security+
+• Certified Information Security Manager (CISM)
+
+PROFESSIONAL ACHIEVEMENTS
+• Successfully prevented major security breach saving company $2M
+• Led security awareness program reducing phishing incidents by 70%
+• Implemented zero-trust security architecture
+• Published security research paper on threat intelligence
+
+LANGUAGES
+• Arabic (Native)
+• English (Fluent)
+• German (Basic)
