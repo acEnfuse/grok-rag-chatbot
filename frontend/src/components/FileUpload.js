@@ -41,18 +41,16 @@ const FileUpload = ({ onFileUpload, loading }) => {
     }
   };
 
-  const { getRootProps, getInputProps, isDragActive, open } = useDropzone({
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
     accept: {
       'application/pdf': ['.pdf'],
       'application/msword': ['.doc'],
       'application/vnd.openxmlformats-officedocument.wordprocessingml.document': ['.docx'],
-      'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': ['.xlsx'],
       'text/plain': ['.txt']
     },
     maxFiles: 1,
-    maxSize: 10 * 1024 * 1024, // 10MB
-    noClick: true // Prevent clicking on the dropzone from opening file browser
+    maxSize: 10 * 1024 * 1024 // 10MB
   });
 
   return (
@@ -95,12 +93,7 @@ const FileUpload = ({ onFileUpload, loading }) => {
                   Drag & drop your CV here, or click to browse<br/>
                   Supports PDF, DOC, DOCX, and TXT files (max 10MB)
                 </p>
-                <button 
-                  type="button"
-                  onClick={open}
-                  className="text-white transition-colors text-3xl font-bold" 
-                  style={{backgroundColor: '#166945', color: 'white', padding: '24px 48px', borderRadius: '50px', boxShadow: 'none', border: 'none'}}
-                >
+                <button className="text-white transition-colors text-3xl font-bold" style={{backgroundColor: '#166945', color: 'white', padding: '24px 48px', borderRadius: '50px', boxShadow: 'none', border: 'none'}}>
                   Choose File
                 </button>
               </>
@@ -131,8 +124,8 @@ const FileUpload = ({ onFileUpload, loading }) => {
               }
             }}
             placeholder="Ask questions about your CV, career advice, or job opportunities... (Press Enter to send)"
-            className="w-full border rounded-lg focus:outline-none"
-            style={{resize: 'none', padding: '16px 24px 16px 24px', borderColor: '#10412A !important', border: '2px solid #10412A !important'}}
+            className="w-full border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
+            style={{resize: 'none', padding: '16px 24px 16px 24px'}}
             rows={1}
             disabled={loading}
           />
@@ -143,7 +136,7 @@ const FileUpload = ({ onFileUpload, loading }) => {
       {(chatResponse || chatError || chatLoading) && (
         <div className="mt-6 max-w-2xl mx-auto">
           <div className="bg-white rounded-lg p-6 border border-gray-200">
-            <h3 className="text-lg font-semibold text-gray-800 mb-4 text-center">AI Assistant Response</h3>
+            <h4 className="text-lg font-semibold text-gray-800 mb-4">AI Assistant Response</h4>
             
             {chatLoading && (
               <div className="flex items-center space-x-2">
@@ -160,17 +153,17 @@ const FileUpload = ({ onFileUpload, loading }) => {
             
                                 {chatResponse && (
                       <div className="prose max-w-none">
-                        <div className="rounded-lg" style={{backgroundColor: 'white', maxHeight: '400px', overflowY: 'auto', border: '2px solid #10412A !important'}}>
-                          <div className="text-sm text-black" style={{paddingLeft: '24px', paddingRight: '24px', paddingTop: '16px', paddingBottom: '16px'}}>
+                        <div className="border border-gray-300 rounded-lg" style={{backgroundColor: 'white', maxHeight: '400px', overflowY: 'auto'}}>
+                          <div className="text-sm text-black p-4" style={{paddingLeft: '24px', paddingRight: '24px'}}>
                             <ReactMarkdown
                               components={{
                                 h1: ({children}) => <h1 className="text-xl font-bold mb-3 text-gray-800">{children}</h1>,
                                 h2: ({children}) => <h2 className="text-lg font-bold mb-2 text-gray-800">{children}</h2>,
                                 h3: ({children}) => <h3 className="text-base font-bold mb-2 text-gray-800">{children}</h3>,
                                 p: ({children}) => <p className="mb-3 text-gray-700 leading-relaxed">{children}</p>,
-                                ul: ({children}) => <ul className="mb-3 text-gray-700" style={{listStyle: 'none', paddingLeft: '0', marginLeft: '0'}}>{children}</ul>,
-                                ol: ({children}) => <ol className="mb-3 text-gray-700" style={{listStyle: 'none', paddingLeft: '0', marginLeft: '0'}}>{children}</ol>,
-                                li: ({children}) => <li className="mb-1" style={{paddingLeft: '0', marginLeft: '0'}}>{children}</li>,
+                                ul: ({children}) => <ul className="mb-3 ml-4 list-disc text-gray-700">{children}</ul>,
+                                ol: ({children}) => <ol className="mb-3 ml-4 list-decimal text-gray-700">{children}</ol>,
+                                li: ({children}) => <li className="mb-1">{children}</li>,
                                 strong: ({children}) => <strong className="font-semibold text-gray-800">{children}</strong>,
                                 em: ({children}) => <em className="italic text-gray-700">{children}</em>
                               }}

@@ -209,44 +209,8 @@ Please answer the question based on the provided context."""
             
         except Exception as e:
             logger.error(f"Error generating response with Groq: {e}")
-            # Return a fallback response when Groq is unavailable
-            return f"I apologize, but I'm currently unable to process your request due to a technical issue with the AI service. However, I can still help you with job matching through our CV upload feature. Please upload your CV to get personalized job recommendations based on the available opportunities in Saudi Arabia."
+            raise
     
-    async def generate_simple_chat_response(self, query: str, chat_history: List[Dict[str, str]] = None) -> str:
-        """Generate a simple chat response without RAG context"""
-        try:
-            # Prepare messages
-            messages = []
-            
-            # Add system message
-            system_message = """You are an AI career advisor for the Human Resources and Social Development (HRSD) ministry in Saudi Arabia. 
-            You help job seekers with career advice, CV analysis, and job matching guidance. 
-            Be helpful, professional, and provide actionable advice about careers in Saudi Arabia."""
-            
-            messages.append({"role": "system", "content": system_message})
-            
-            # Add chat history
-            if chat_history:
-                messages.extend(chat_history)
-            
-            # Add current query
-            messages.append({"role": "user", "content": query})
-            
-            # Generate response
-            response = await self.client.chat.completions.create(
-                model=self.model,
-                messages=messages,
-                temperature=0.7,
-                max_completion_tokens=4000
-            )
-            
-            return response.choices[0].message.content
-            
-        except Exception as e:
-            logger.error(f"Error generating chat response with Groq: {e}")
-            # Return a fallback response when Groq is unavailable
-            return f"I apologize, but I'm currently unable to process your request due to a technical issue with the AI service. However, I can still help you with job matching through our CV upload feature. Please upload your CV to get personalized job recommendations based on the available opportunities in Saudi Arabia."
-
     async def generate_summary(self, text: str, max_length: int = 200) -> str:
         """Generate a summary of the given text"""
         try:

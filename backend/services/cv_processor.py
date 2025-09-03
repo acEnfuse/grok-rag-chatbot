@@ -6,13 +6,12 @@ import logging
 import re
 import PyPDF2
 import io
-import openpyxl
 
 logger = logging.getLogger(__name__)
 
 class CVProcessor:
     def __init__(self):
-        self.supported_formats = ['.pdf', '.txt', '.doc', '.docx', '.xlsx']
+        self.supported_formats = ['.pdf', '.txt', '.doc', '.docx']
         self.max_file_size = 10 * 1024 * 1024  # 10MB limit
     
     async def process_cv(self, file_path: str, filename: str) -> Dict[str, Any]:
@@ -70,8 +69,6 @@ class CVProcessor:
                 return await self._extract_pdf_text(file_path)
             elif file_ext == '.txt':
                 return await self._extract_txt_text(file_path)
-            elif file_ext == '.xlsx':
-                return await self._extract_xlsx_text(file_path)
             else:
                 # Use Tika for other formats (doc, docx, etc.)
                 return await self._extract_tika_text(file_path)
@@ -114,37 +111,6 @@ class CVProcessor:
             except Exception as e:
                 logger.error(f"Error reading text file: {e}")
                 raise
-    
-    async def _extract_xlsx_text(self, file_path: str) -> str:
-        """Extract text from Excel XLSX file"""
-        try:
-            workbook = openpyxl.load_workbook(file_path, data_only=True)
-            text_parts = []
-            
-            # Extract text from all worksheets
-            for sheet_name in workbook.sheetnames:
-                worksheet = workbook[sheet_name]
-                sheet_text = []
-                
-                # Get all cell values
-                for row in worksheet.iter_rows():
-                    row_values = []
-                    for cell in row:
-                        if cell.value is not None:
-                            row_values.append(str(cell.value))
-                    
-                    if row_values:  # Only add non-empty rows
-                        sheet_text.append(" | ".join(row_values))
-                
-                if sheet_text:
-                    text_parts.append(f"Sheet: {sheet_name}\n" + "\n".join(sheet_text))
-            
-            combined_text = "\n\n".join(text_parts)
-            return self._clean_text(combined_text)
-            
-        except Exception as e:
-            logger.error(f"Error extracting XLSX text: {e}")
-            raise
     
     async def _extract_tika_text(self, file_path: str) -> str:
         """Extract text using Tika (for doc, docx, etc.)"""

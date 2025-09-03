@@ -240,19 +240,16 @@ async def get_collection_stats():
         raise HTTPException(status_code=500, detail=f"Error getting stats: {str(e)}")
 
 # Chat endpoint for interactive job matching
-class ChatRequest(BaseModel):
-    message: str
-    chat_history: Optional[List[Dict[str, str]]] = []
-
 @app.post("/chat")
-async def chat_with_advisor(request: ChatRequest):
+async def chat_with_advisor(message: str, chat_history: List[Dict[str, str]] = None):
     """Chat with the AI career advisor"""
     try:
         # For now, return a simple response
         # This can be enhanced to provide more interactive job matching
-        response = await groq_service.generate_simple_chat_response(
-            query=request.message,
-            chat_history=request.chat_history
+        response = await groq_service.generate_response(
+            query=message,
+            context_docs=[],
+            chat_history=chat_history or []
         )
         
         return {
