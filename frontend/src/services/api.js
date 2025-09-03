@@ -124,11 +124,14 @@ export const getCollectionStats = async () => {
   }
 };
 
-export const chatWithAdvisor = async (message, chatHistory = []) => {
+export const chatWithAdvisor = async (message, chatHistory = [], jobMatches = null, cvData = null, analysis = null) => {
   try {
     const response = await api.post('/chat', {
       message,
       chat_history: chatHistory,
+      job_matches: jobMatches,
+      cv_data: cvData,
+      analysis: analysis,
     });
     return response.data;
   } catch (error) {

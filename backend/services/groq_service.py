@@ -158,10 +158,20 @@ Job {i}:
             # Prepare context from retrieved documents
             context = ""
             if context_docs:
-                context = "\n\n".join([
-                    f"Document: {doc['filename']}\nContent: {doc['text']}"
-                    for doc in context_docs[:5]  # Limit to top 5 documents
-                ])
+                # Handle both string and dict formats
+                context_parts = []
+                for doc in context_docs[:5]:  # Limit to top 5 documents
+                    if isinstance(doc, str):
+                        context_parts.append(doc)
+                    elif isinstance(doc, dict):
+                        if 'filename' in doc and 'text' in doc:
+                            context_parts.append(f"Document: {doc['filename']}\nContent: {doc['text']}")
+                        else:
+                            # Handle other dict formats
+                            context_parts.append(str(doc))
+                    else:
+                        context_parts.append(str(doc))
+                context = "\n\n".join(context_parts)
             
             # Prepare chat history
             messages = []

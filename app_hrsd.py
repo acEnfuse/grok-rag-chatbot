@@ -13,6 +13,14 @@ from backend.services.groq_service import GroqService
 from backend.services.cv_processor import CVProcessor
 from backend.services.job_embedder import JobEmbedder
 
+# Request models
+class ChatRequest(BaseModel):
+    message: str
+    chat_history: Optional[List[Dict[str, str]]] = None
+    job_matches: Optional[List[Dict[str, Any]]] = None
+    cv_data: Optional[Dict[str, Any]] = None
+    analysis: Optional[str] = None
+
 # Configure logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -241,15 +249,42 @@ async def get_collection_stats():
 
 # Chat endpoint for interactive job matching
 @app.post("/chat")
-async def chat_with_advisor(message: str, chat_history: List[Dict[str, str]] = None):
-    """Chat with the AI career advisor"""
+async def chat_with_advisor(request: ChatRequest):
+    """Chat with the AI career advisor with RAG context"""
     try:
-        # For now, return a simple response
-        # This can be enhanced to provide more interactive job matching
+        # Prepare context documents from job matches and CV data
+        context_docs = []
+        
+        if request.job_matches:
+            for i, job in enumerate(request.job_matches[:5]):  # Limit to top 5 jobs for context
+                job_context = f"""
+Job {i+1}: {job.get('job_title', 'Unknown Title')}
+Company: {job.get('company', 'Unknown Company')}
+Match Score: {job.get('match_score', 0)}%
+Description: {job.get('description', 'No description available')[:200]}...
+Required Skills: {job.get('required_skills', 'No skills listed')[:150]}...
+Education: {job.get('education_requirements', 'No education requirements')}
+Location: {job.get('location', 'Location not specified')}
+"""
+                context_docs.append(job_context)
+        
+        if request.cv_data:
+            cv_context = f"""
+CV Summary:
+Experience: {request.cv_data.get('experience', 'No experience listed')}
+Education: {request.cv_data.get('education', 'No education listed')}
+Skills: {request.cv_data.get('skills', 'No skills listed')}
+"""
+            context_docs.append(cv_context)
+        
+        if request.analysis:
+            context_docs.append(f"AI Analysis: {request.analysis}")
+        
+        # Generate response with RAG context
         response = await groq_service.generate_response(
-            query=message,
-            context_docs=[],
-            chat_history=chat_history or []
+            query=request.message,
+            context_docs=context_docs,
+            chat_history=request.chat_history or []
         )
         
         return {
