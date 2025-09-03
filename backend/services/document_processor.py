@@ -8,6 +8,10 @@ import re
 logger = logging.getLogger(__name__)
 
 class DocumentProcessor:
+    """
+    Legacy document processor - kept for backward compatibility.
+    For new CV processing, use CVProcessor instead.
+    """
     def __init__(self):
         self.chunk_size = 1000  # characters per chunk
         self.chunk_overlap = 200  # overlap between chunks
