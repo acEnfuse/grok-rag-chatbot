@@ -127,22 +127,19 @@ async def upload_cv(file: UploadFile = File(...)):
 async def match_jobs(request: JobMatchRequest):
     """Match jobs based on CV text"""
     try:
-        # Search for matching jobs
+        # Search for matching jobs (data is already formatted when stored)
         matched_jobs = await milvus_service.search_jobs(request.cv_text, request.top_k)
-        
-        # Format job data to make it more human-readable
-        formatted_jobs = await groq_service.format_job_data(matched_jobs)
         
         # Process CV data for analysis
         cv_data = await cv_processor.process_cv_from_text(request.cv_text)
         
-        # Generate AI analysis
+                # Generate AI analysis
         analysis = await groq_service.generate_job_matching_response(
-            cv_data, formatted_jobs
+            cv_data, matched_jobs
         )
-        
+
         return JobMatchResponse(
-            matches=formatted_jobs,
+            matches=matched_jobs,
             analysis=analysis,
             cv_summary=cv_data
         )

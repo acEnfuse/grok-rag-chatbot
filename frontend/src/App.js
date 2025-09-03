@@ -1,9 +1,26 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import FileUpload from './components/FileUpload';
 import JobMatches from './components/JobMatches';
 import { uploadCVAndMatch } from './services/api';
 
 function App() {
+  // Scroll to top when component mounts (page loads)
+  useEffect(() => {
+    // Disable browser scroll restoration
+    if ('scrollRestoration' in window.history) {
+      window.history.scrollRestoration = 'manual';
+    }
+    
+    // Scroll to top immediately
+    window.scrollTo(0, 0);
+    
+    // Also scroll to top after a small delay to ensure it works
+    const timeoutId = setTimeout(() => {
+      window.scrollTo(0, 0);
+    }, 100);
+    
+    return () => clearTimeout(timeoutId);
+  }, []);
   const [jobMatches, setJobMatches] = useState(null);
   const [cvData, setCvData] = useState(null);
   const [analysis, setAnalysis] = useState(null);
@@ -78,7 +95,7 @@ function App() {
             <div className="max-w-6xl mx-auto">
               <div className="text-center mb-12">
                 <br/>
-                <h3 className="text-3xl font-bold text-gray-800 mb-4">
+                <h3 className="text-gray-800 mb-4" style={{fontSize: '32px', fontWeight: 'bold'}}>
                   Your Job Matches
                 </h3>
                 <p className="text-lg text-gray-600">
@@ -95,18 +112,19 @@ function App() {
                     matches={jobMatches}
                     cvData={cvData}
                   />
+                  <br/>
                 </div>
                 
                 <div>
                   <div className="mb-6">
                     <div style={{backgroundColor: '#10412A', height: '4px', width: '100%'}}></div>
                   </div>
-                  <div className="bg-white border border-gray-200 rounded-lg p-6">
-                    <h4 className="text-lg font-semibold mb-4 text-gray-800">AI Analysis</h4>
+                  <div className="bg-white border border-gray-200 rounded-lg p-6" style={{paddingLeft: '24px', paddingRight: '24px'}}>
+                    <h4 className="text-gray-800 mb-4" style={{fontSize: '24px', fontWeight: 'bold'}}>AI Analysis</h4>
                     <div className="prose max-w-none">
-                      <pre className="whitespace-pre-wrap text-sm text-gray-700">
+                      <div className="text-gray-700" style={{fontSize: '16px', fontFamily: 'inherit', whiteSpace: 'pre-wrap', wordWrap: 'break-word'}}>
                         {analysis}
-                      </pre>
+                      </div>
                     </div>
                     <br/>
                   </div>

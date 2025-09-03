@@ -1,11 +1,6 @@
 import React from 'react';
 
 const JobMatches = ({ matches, cvData }) => {
-  const getMatchScoreClass = (score) => {
-    if (score >= 80) return 'bg-green-100 text-green-800';
-    if (score >= 60) return 'bg-yellow-100 text-yellow-800';
-    return 'bg-red-100 text-red-800';
-  };
 
   const getMatchScoreLabel = (score) => {
     if (score >= 80) return 'Excellent Match';
@@ -20,28 +15,23 @@ const JobMatches = ({ matches, cvData }) => {
         <div className="space-y-6">
           {matches.map((job, index) => (
             <div key={job.id || index}>
-              <div className="bg-white rounded-lg shadow p-6">
-                <div className="flex justify-between items-start mb-4">
-                <div className="flex-1">
-                  <h4 className="text-xl font-semibold text-gray-800 mb-2">
-                    {job.job_title || 'Job Title Not Available'}
-                  </h4>
-                  <p className="text-gray-600 mb-2">
-                    {job.company || 'Company Not Specified'}
-                  </p>
+              <div className="bg-white rounded-lg shadow p-6" style={{paddingLeft: '24px', paddingRight: '24px'}}>
+                <div className="mb-2">
+                <div className="text-gray-800 mb-4" style={{fontSize: '24px', fontWeight: 'bold'}}>
+                  {job.job_title || 'Job Title Not Available'}
                 </div>
-                
-                <div className="text-right">
-                  <div className={`inline-flex px-3 py-1 rounded-full text-sm font-medium ${getMatchScoreClass(job.match_score)}`}>
-                    {job.match_score}% Match
-                  </div>
-                  <p className="text-xs text-gray-500 mt-1">
-                    {getMatchScoreLabel(job.match_score)}
-                  </p>
+                <div className="text-gray-600 mb-1">
+                  <strong>Sector:</strong> {job.company || 'Company Not Specified'}
+                </div>
+                <div className="text-gray-600 mb-1">
+                  <strong>Match Percentage:</strong> {job.match_score}% Match
+                </div>
+                <div className="text-gray-600">
+                  <strong>Match Level:</strong> {getMatchScoreLabel(job.match_score)}
                 </div>
               </div>
 
-              <div className="grid md:grid-cols-2 gap-4 mb-4 text-sm text-gray-600">
+              <div className="grid md:grid-cols-2 gap-4 text-gray-600">
                 <div>
                   <strong>Location:</strong> {job.location || 'Not specified'}
                 </div>
@@ -53,30 +43,25 @@ const JobMatches = ({ matches, cvData }) => {
                 )}
               </div>
 
-              <div className="mb-4">
-                <h5 className="font-medium text-gray-800 mb-2">Description:</h5>
-                <p className="text-gray-600 text-sm leading-relaxed">
+              <div>
+                <div className="text-gray-800 mb-2"><strong>Description:</strong></div>
+                <p className="text-gray-600 leading-relaxed">
                   {job.description || 'No description available'}
                 </p>
               </div>
 
               {job.required_skills && (
-                <div className="mb-4">
-                  <h5 className="font-medium text-gray-800 mb-2">Required Skills:</h5>
-                  <div className="flex flex-wrap gap-2">
-                    {job.required_skills.split(',').map((skill, skillIndex) => (
-                      <span
-                        key={skillIndex}
-                        className="bg-gray-100 text-gray-700 px-2 py-1 rounded text-xs whitespace-nowrap"
-                      >
-                        {skill.trim()}
-                      </span>
-                    ))}
+                <div>
+                  <div className="text-gray-800 mb-2"><strong>Required Skills:</strong></div>
+                  {console.log('🔍 RAW SKILLS STRING:', job.required_skills)}
+                  {console.log('🔍 SPLIT RESULT:', job.required_skills.split(','))}
+                  <div style={{lineHeight: '1.4'}}>
+                    {job.required_skills.split(',').map(s => s.trim()).filter(s => s.length > 0).join(', ')}
                   </div>
                 </div>
               )}
 
-              <div className="grid md:grid-cols-2 gap-4 text-sm text-gray-600 mb-4">
+              <div className="grid md:grid-cols-2 gap-4 text-gray-600">
                 {job.experience_level && (
                   <div>
                     <strong>Experience Level:</strong> {job.experience_level}

@@ -41,7 +41,7 @@ const FileUpload = ({ onFileUpload, loading }) => {
     }
   };
 
-  const { getRootProps, getInputProps, isDragActive } = useDropzone({
+  const { getInputProps, isDragActive } = useDropzone({
     onDrop,
     accept: {
       'application/pdf': ['.pdf'],
@@ -62,12 +62,14 @@ const FileUpload = ({ onFileUpload, loading }) => {
       )}
 
       <div
-        {...getRootProps()}
         className={`border-2 border-dashed border-gray-300 rounded-lg p-16 text-center transition-colors ${
           isDragActive ? 'border-green-600 bg-green-50' : 'hover:border-green-400'
-        } ${loading ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
+        } ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
+        onDrop={onDrop}
+        onDragOver={(e) => e.preventDefault()}
+        onDragEnter={(e) => e.preventDefault()}
       >
-        <input {...getInputProps()} disabled={loading} />
+        <input {...getInputProps()} disabled={loading} style={{display: 'none'}} />
         
         {loading ? (
           <div className="flex flex-col items-center p-8" style={{paddingTop: '40px'}}>
@@ -90,10 +92,14 @@ const FileUpload = ({ onFileUpload, loading }) => {
                 <br/>
                 <p className="text-xs font-medium text-gray-700 mb-4">
                   Upload your CV to discover matching job opportunities in Saudi Arabia<br/>
-                  Drag & drop your CV here, or click to browse<br/>
+                  Drag & drop your CV here, or click the button below to browse<br/>
                   Supports PDF, DOC, DOCX, and TXT files (max 10MB)
                 </p>
-                <button className="text-white transition-colors text-3xl font-bold" style={{backgroundColor: '#166945', color: 'white', padding: '24px 48px', borderRadius: '50px', boxShadow: 'none', border: 'none'}}>
+                <button 
+                  onClick={() => document.querySelector('input[type="file"]').click()}
+                  className="text-white transition-colors text-3xl font-bold cursor-pointer" 
+                  style={{backgroundColor: '#166945', color: 'white', padding: '24px 48px', borderRadius: '50px', boxShadow: 'none', border: 'none'}}
+                >
                   Choose File
                 </button>
               </>

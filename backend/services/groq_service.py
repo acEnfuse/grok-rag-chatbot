@@ -390,6 +390,7 @@ Please answer the question based on the provided context."""
             'e, ffective, c ommunication': 'effective communication',
             'f, ocus, on, s ervie, q uality': 'focus on service quality',
             'servie quality': 'service quality',
+            'Focus on Servie Quality': 'focus on service quality',
             'p, rogram, d esign': 'program design',
             's, oftware, e ngineering': 'software engineering',
             'c, omputer, p rogramming, l anguages': 'computer programming languages',
@@ -431,8 +432,58 @@ Please answer the question based on the provided context."""
         for concatenated, separated in concatenated_patterns.items():
             formatted = formatted.replace(concatenated, separated)
         
-        # Handle any remaining camelCase patterns
+        # Handle any remaining camelCase patterns - this is the main fix
         formatted = re.sub(r'([a-z])([A-Z])', r'\1 \2', formatted)
+        
+        # Fix concatenated words within individual skills
+        # Split on commas first, then fix each skill individually
+        skills = formatted.split(',')
+        fixed_skills = []
+        
+        for skill in skills:
+            skill = skill.strip()
+            if skill:
+                # Fix common concatenated words in individual skills
+                skill = re.sub(r'ResearchData', 'Research Data', skill)
+                skill = re.sub(r'ReportingComputer', 'Reporting Computer', skill)
+                skill = re.sub(r'ComputerProgramming', 'Computer Programming', skill)
+                skill = re.sub(r'DataAnalysis', 'Data Analysis', skill)
+                skill = re.sub(r'BusinessAnalysis', 'Business Analysis', skill)
+                skill = re.sub(r'SoftwareDevelopment', 'Software Development', skill)
+                skill = re.sub(r'SoftwareTesting', 'Software Testing', skill)
+                skill = re.sub(r'WebDevelopment', 'Web Development', skill)
+                skill = re.sub(r'DatabaseDesign', 'Database Design', skill)
+                skill = re.sub(r'SystemAnalysis', 'System Analysis', skill)
+                skill = re.sub(r'ProjectManagement', 'Project Management', skill)
+                skill = re.sub(r'QualityAssurance', 'Quality Assurance', skill)
+                skill = re.sub(r'NetworkSecurity', 'Network Security', skill)
+                skill = re.sub(r'CyberSecurity', 'Cyber Security', skill)
+                skill = re.sub(r'CloudComputing', 'Cloud Computing', skill)
+                skill = re.sub(r'MachineLearning', 'Machine Learning', skill)
+                skill = re.sub(r'ArtificialIntelligence', 'Artificial Intelligence', skill)
+                skill = re.sub(r'PerformanceTesting', 'Performance Testing', skill)
+                skill = re.sub(r'SecurityTesting', 'Security Testing', skill)
+                skill = re.sub(r'UserInterface', 'User Interface', skill)
+                skill = re.sub(r'UserExperience', 'User Experience', skill)
+                skill = re.sub(r'BackendDevelopment', 'Backend Development', skill)
+                skill = re.sub(r'FrontendDevelopment', 'Frontend Development', skill)
+                skill = re.sub(r'FullStack', 'Full Stack', skill)
+                
+                # Fix the specific patterns we're seeing in the UI
+                skill = re.sub(r'FinancingCredit', 'Financing, Credit', skill)
+                skill = re.sub(r'Analysis comparisons', 'Analysis, comparisons', skill)
+                skill = re.sub(r'analysis research', 'analysis, research', skill)
+                skill = re.sub(r'Bonds Investment', 'Bonds, Investment', skill)
+                skill = re.sub(r'Analysis Instruments', 'Analysis, Instruments', skill)
+                skill = re.sub(r'Team Effective', 'Team Work, Effective Communication', skill)
+                skill = re.sub(r'Work Communication', 'Work, Communication', skill)
+                
+                # Generic pattern for remaining camelCase words
+                skill = re.sub(r'([a-z])([A-Z])', r'\1 \2', skill)
+                
+                fixed_skills.append(skill.strip())
+        
+        formatted = ', '.join(fixed_skills)
         
         # Clean up multiple spaces
         formatted = re.sub(r'\s+', ' ', formatted.strip())

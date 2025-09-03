@@ -5,11 +5,21 @@ const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000';
 const api = axios.create({
   baseURL: API_BASE_URL,
   timeout: 30000, // 30 seconds timeout for file uploads
+  headers: {
+    'Cache-Control': 'no-cache, no-store, must-revalidate',
+    'Pragma': 'no-cache',
+    'Expires': '0'
+  }
 });
 
 // Request interceptor
 api.interceptors.request.use(
   (config) => {
+    // Add timestamp to prevent caching
+    const timestamp = Date.now();
+    if (config.url) {
+      config.url += (config.url.includes('?') ? '&' : '?') + `_t=${timestamp}`;
+    }
     console.log(`Making ${config.method?.toUpperCase()} request to ${config.url}`);
     return config;
   },
@@ -43,9 +53,13 @@ api.interceptors.response.use(
 // API functions
 export const uploadCVAndMatch = async (formData) => {
   try {
-    const response = await api.post('/upload-cv-and-match', formData, {
+    // Add cache-busting parameter
+    const timestamp = Date.now();
+    const response = await api.post(`/upload-cv-and-match?t=${timestamp}`, formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
+        'Cache-Control': 'no-cache',
+        'Pragma': 'no-cache'
       },
     });
     return response.data;

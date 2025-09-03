@@ -82,6 +82,18 @@ class MilvusService:
             index_params=index_params
         )
     
+    async def clear_collection(self):
+        """Drops the existing collection and recreates it."""
+        try:
+            if self.client.has_collection(collection_name=self.collection_name):
+                self.client.drop_collection(collection_name=self.collection_name)
+                logger.info(f"✅ Dropped existing {self.collection_name} collection")
+            await self._create_collection()
+            logger.info(f"✅ Created fresh {self.collection_name} collection")
+        except Exception as e:
+            logger.error(f"Error clearing and recreating collection: {e}")
+            raise
+    
     def _generate_embeddings(self, texts: List[str]) -> List[List[float]]:
         """Generate embeddings for a list of texts"""
         model = self._get_embedding_model()  # Lazy load when needed
@@ -94,9 +106,14 @@ class MilvusService:
             if not jobs:
                 return {"message": "No jobs to add"}
             
+            # Format job data before storing
+            from .groq_service import GroqService
+            groq_service = GroqService()
+            formatted_jobs = await groq_service.format_job_data(jobs)
+            
             # Prepare data for embedding (combine job description and requirements)
             texts = []
-            for job in jobs:
+            for job in formatted_jobs:
                 # Create a comprehensive text for embedding
                 job_text = f"""
                 Job Title: {job.get('job_title', '')}
@@ -112,7 +129,7 @@ class MilvusService:
             embeddings = self._generate_embeddings(texts)
             
             data = []
-            for job, embedding in zip(jobs, embeddings):
+            for job, embedding in zip(formatted_jobs, embeddings):
                 data.append({
                     "id": str(uuid.uuid4()),
                     "vector": embedding,
@@ -144,25 +161,26 @@ class MilvusService:
         try:
             # Generate query embedding from CV text
             query_embedding = self._generate_embeddings([cv_text])[0]
-            
+
             # Search
             results = self.client.search(
                 collection_name=self.collection_name,
                 data=[query_embedding],
                 anns_field="vector",
                 search_params={"metric_type": "COSINE", "params": {"nprobe": 10}},
-                output_fields=["job_title", "company", "description", "required_skills", 
+                output_fields=["job_title", "company", "description", "required_skills",
                              "experience_level", "education_requirements", "location", "salary_range"],
                 limit=top_k
             )
-            
-            # Format results
+
+            # Format results with basic scores first
             jobs = []
             for hits in results:
                 for hit in hits:
                     # Convert distance to similarity score (0-100%)
-                    similarity_score = max(0, (1 - hit.get("distance", 1.0)) * 100)
-                    
+                    distance = hit.get("distance", 1.0)
+                    base_score = max(0, (1 - distance) * 100)
+
                     jobs.append({
                         "id": hit.get("id", "unknown"),
                         "job_title": hit.get("entity", {}).get("job_title", ""),
@@ -173,14 +191,90 @@ class MilvusService:
                         "education_requirements": hit.get("entity", {}).get("education_requirements", ""),
                         "location": hit.get("entity", {}).get("location", ""),
                         "salary_range": hit.get("entity", {}).get("salary_range", ""),
-                        "match_score": round(similarity_score, 1)
+                        "match_score": round(base_score, 1)
                     })
+
+            # Use LLM to intelligently rescore the matches
+            jobs = await self._llm_rescore_matches(cv_text, jobs)
             
             return jobs
-            
+
         except Exception as e:
             logger.error(f"Error searching jobs: {e}")
             raise
+    
+    async def _llm_rescore_matches(self, cv_text: str, jobs: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+        """Use LLM to intelligently rescore job matches based on profession compatibility"""
+        try:
+            from backend.services.groq_service import GroqService
+            groq_service = GroqService()
+            
+            # Prepare job data for LLM analysis
+            job_summaries = []
+            for i, job in enumerate(jobs):
+                job_summaries.append(f"""
+Job {i+1}: {job['job_title']}
+Company: {job['company']}
+Description: {job['description'][:200]}...
+Required Skills: {job['required_skills'][:150]}...
+Education: {job['education_requirements']}
+Current Score: {job['match_score']}%
+""")
+            
+            jobs_text = "\n".join(job_summaries)
+            
+            prompt = f"""
+You are an expert job matching AI. Analyze the CV and job opportunities below, then provide intelligent match scores (0-100%) based on:
+
+1. **Profession Compatibility**: Does the job match the candidate's profession?
+2. **Skill Alignment**: How well do the required skills match the candidate's experience?
+3. **Education Level**: Is the education requirement appropriate?
+4. **Experience Level**: Is the experience level suitable?
+
+**CV:**
+{cv_text[:1000]}...
+
+**Job Opportunities:**
+{jobs_text}
+
+**Instructions:**
+- Give higher scores (80-100%) for jobs that directly match the candidate's profession
+- Give medium scores (50-79%) for related jobs where skills transfer
+- Give lower scores (20-49%) for jobs that require different professions
+- Give very low scores (0-19%) for completely unrelated jobs
+
+**Output Format:**
+Return ONLY a JSON array with the new scores, like this:
+[85.5, 72.3, 45.2, 91.8, 38.7, 67.4, 23.1, 89.2, 56.9, 41.3]
+
+Do not include any other text, just the JSON array of scores.
+"""
+
+            response = await groq_service.generate_response(prompt, [])
+            
+            # Parse the LLM response
+            import json
+            import re
+            
+            # Extract JSON array from response
+            json_match = re.search(r'\[[\d\.,\s]+\]', response)
+            if json_match:
+                scores = json.loads(json_match.group())
+                
+                # Update job scores
+                for i, job in enumerate(jobs):
+                    if i < len(scores):
+                        job['match_score'] = round(float(scores[i]), 1)
+                
+                logger.info(f"LLM rescored {len(jobs)} job matches")
+                return jobs
+            else:
+                logger.warning("Could not parse LLM response, using original scores")
+                return jobs
+                
+        except Exception as e:
+            logger.error(f"Error in LLM rescoring: {e}")
+            return jobs  # Return original jobs if LLM fails
     
     async def list_documents(self) -> List[Dict[str, Any]]:
         """List all unique documents in the collection"""
