@@ -1,132 +1,179 @@
-# RAG Chatbot with Milvus and Groq
+# HRSD Job Matching System
 
-A Retrieval-Augmented Generation (RAG) chatbot built with Streamlit that allows you to upload documents and chat with your knowledge base using Milvus vector database and Groq LLM inference.
+A comprehensive AI-powered job matching platform for the Human Resources and Social Development (HRSD) ministry of Saudi Arabia. This system helps job seekers find relevant career opportunities by analyzing their CVs and matching them with available positions using advanced semantic search and AI-powered career advice.
 
-## Features
+## 🚀 Features
 
-- 📄 **Document Upload**: Support for PDF, TXT, DOCX, DOC, and RTF files
-- 🔍 **Semantic Search**: Find relevant information using vector similarity
-- 💬 **Interactive Chat**: Chat interface with conversation history
-- 📚 **Document Management**: View, manage, and delete uploaded documents
-- 🚀 **Fast Inference**: Powered by Groq's high-speed LLM API
-- 🎯 **Source Citations**: See which documents were used to answer your questions
+### Core Functionality
+- **CV Processing**: Supports multiple file formats (PDF, DOC, DOCX, TXT)
+- **AI-Powered Job Matching**: Uses semantic search to find relevant job opportunities
+- **Career Advice**: Interactive AI assistant powered by Groq LLM
+- **Real-time Analysis**: Instant CV analysis and job matching results
+- **Secure Processing**: CV data is processed securely and not stored permanently
 
-## Prerequisites
+### Technical Features
+- **Vector Database**: Milvus integration for efficient job opportunity storage and retrieval
+- **Semantic Search**: Advanced embedding-based job matching
+- **Modern UI**: React frontend with HRSD branding and responsive design
+- **RESTful API**: FastAPI backend with comprehensive endpoints
+- **Document Processing**: Robust text extraction and cleaning from various file formats
 
+## 🏗️ Architecture
+
+### Frontend (React)
+- **Components**: FileUpload, JobMatches, ChatInterface
+- **Styling**: Tailwind CSS with HRSD color scheme
+- **State Management**: React hooks for application state
+- **API Integration**: RESTful communication with backend
+
+### Backend (FastAPI)
+- **Services**: 
+  - `MilvusService`: Vector database operations
+  - `CVProcessor`: Document parsing and text extraction
+  - `JobEmbedder`: Job opportunity management and embedding
+  - `GroqService`: AI-powered career advice and analysis
+- **Endpoints**: Health checks, CV upload, job matching, chat functionality
+
+### Database (Milvus)
+- **Collection**: `hrsd` - stores job opportunities with embeddings
+- **Schema**: Job title, description, requirements, location, salary, etc.
+- **Search**: Semantic similarity search for job matching
+
+## 🛠️ Installation & Setup
+
+### Prerequisites
 - Python 3.8+
-- Milvus cluster (provided credentials in `.env`)
-- Groq API key (provided in `.env`)
-- Java 8+ (required for Apache Tika)
+- Node.js 16+
+- Conda (recommended for environment management)
+- Milvus database instance
 
-## Installation
+### Backend Setup
 
-1. **Clone the repository**:
+1. **Create Conda Environment**
    ```bash
-   git clone <your-repo-url>
-   cd rag_chatbot
+   conda create -n hrsd-job-matcher python=3.9
+   conda activate hrsd-job-matcher
    ```
 
-2. **Install dependencies**:
+2. **Install Dependencies**
    ```bash
-   pip install -r requirements.txt
+   pip install -r requirements-hrsd.txt
    ```
 
-3. **Environment setup**:
-   - Copy `.env.example` to `.env` (already done with your credentials)
-   - The environment file includes your Milvus cluster and Groq API configurations
-
-4. **Install Java** (required for Tika):
-   - **macOS**: `brew install openjdk@11`
-   - **Ubuntu**: `sudo apt-get install openjdk-11-jdk`
-   - **Windows**: Download from Oracle or use OpenJDK
-
-## Usage
-
-1. **Start the application**:
+3. **Set Environment Variables**
    ```bash
-   streamlit run app.py
+   export GROQ_API_KEY="your_groq_api_key_here"
    ```
 
-2. **Access the app**:
-   - Open your browser to `http://localhost:8501`
+4. **Start Backend Server**
+   ```bash
+   ./run-hrsd.sh
+   ```
+   Or manually:
+   ```bash
+   uvicorn app_hrsd:app --reload --host 0.0.0.0 --port 8000
+   ```
 
-3. **Upload documents**:
-   - Use the sidebar to upload PDF, DOCX, TXT, or other supported files
-   - Click "Process Document" to parse and store in the vector database
+### Frontend Setup
 
-4. **Chat with your documents**:
-   - Type questions in the chat input
-   - The system will find relevant document chunks and generate answers
-   - View source citations in the expandable "Sources" section
+1. **Navigate to Frontend Directory**
+   ```bash
+   cd frontend
+   ```
 
-## Project Structure
+2. **Install Dependencies**
+   ```bash
+   npm install
+   ```
+
+3. **Start Development Server**
+   ```bash
+   npm start
+   ```
+
+The application will be available at:
+- Frontend: http://localhost:3000
+- Backend API: http://localhost:8000
+- API Documentation: http://localhost:8000/docs
+
+## 📁 Project Structure
 
 ```
 rag_chatbot/
-├── app.py                          # Main Streamlit application
-├── requirements.txt                # Python dependencies
-├── .env                           # Environment variables (your credentials)
-├── .env.example                   # Environment template
-├── README.md                      # This file
-└── backend/
-    ├── __init__.py
-    └── services/
-        ├── __init__.py
-        ├── milvus_service.py      # Vector database operations
-        ├── groq_service.py        # LLM inference
-        └── document_processor.py  # Document parsing and chunking
+├── app_hrsd.py                 # Main FastAPI application
+├── backend/
+│   └── services/
+│       ├── milvus_service.py   # Milvus database operations
+│       ├── cv_processor.py     # CV document processing
+│       ├── job_embedder.py     # Job opportunity management
+│       ├── groq_service.py     # AI/LLM integration
+│       └── document_processor.py # Legacy document processor
+├── frontend/
+│   ├── src/
+│   │   ├── components/         # React components
+│   │   ├── services/           # API service functions
+│   │   └── styles/             # CSS styling
+│   └── public/                 # Static assets
+├── requirements-hrsd.txt       # Python dependencies
+├── run-hrsd.sh                # Backend startup script
+└── README.md                  # This file
 ```
 
-## Configuration
+## 🔧 Configuration
 
 ### Environment Variables
+- `GROQ_API_KEY`: Required for AI-powered features
+- `MILVUS_HOST`: Milvus database host (default: localhost)
+- `MILVUS_PORT`: Milvus database port (default: 19530)
 
-- `GROQ_API_KEY`: Your Groq API key for LLM inference
-- `MILVUS_HOST`: Milvus cluster IP address
-- `MILVUS_PORT`: Milvus port (default: 19530)
-- `MILVUS_TOKEN`: Authentication token for Milvus
-- `COLLECTION_NAME`: Name of the vector collection
-- `EMBEDDING_MODEL`: Sentence transformer model name
+### HRSD Branding
+The application uses the official HRSD color scheme:
+- Primary Green: `#10412A`
+- Light Green: `#F3FCF5`
+- Gray: `#F3F4F6`
+- White: `#FFFFFF`
 
-### Customization
+## 📊 API Endpoints
 
-You can customize various parameters in the code:
+### Core Endpoints
+- `GET /` - Health check and system information
+- `POST /upload-cv` - Upload and process CV for job matching
+- `GET /collection-stats` - Get database collection statistics
+- `POST /chat` - AI-powered career advice chat
 
-- **Chunk size**: Modify `chunk_size` in `DocumentProcessor`
-- **Embedding model**: Change `EMBEDDING_MODEL` in `.env`
-- **LLM model**: Update `self.model` in `GroqService`
-- **Search results**: Adjust `top_k` parameter in search functions
+### Job Management
+- `POST /add-job` - Add individual job opportunity
+- `POST /add-jobs` - Bulk add job opportunities
+- `POST /add-sample-jobs` - Add sample job data for testing
 
-## Supported File Types
+## 🎯 Usage
 
-- **PDF**: `.pdf`
-- **Microsoft Word**: `.docx`, `.doc`
-- **Rich Text**: `.rtf`
-- **Plain Text**: `.txt`
+### For Job Seekers
+1. **Upload CV**: Drag and drop or browse to upload your CV
+2. **Get Matches**: System analyzes your CV and finds matching job opportunities
+3. **AI Advice**: Ask questions about your career or job opportunities
+4. **Review Results**: View detailed job matches with compatibility scores
 
-## Troubleshooting
+### For Administrators
+1. **Add Jobs**: Use API endpoints to add new job opportunities
+2. **Monitor System**: Check collection statistics and system health
+3. **Manage Data**: Update or remove job opportunities as needed
 
-### Common Issues
+## 🔒 Security & Privacy
 
-1. **Java not found**: Install Java 8+ for Tika document processing
-2. **Milvus connection**: Ensure your Milvus cluster is accessible
-3. **Groq API errors**: Check your API key and rate limits
-4. **Memory issues**: Reduce chunk size for large documents
+- **Data Processing**: CVs are processed in memory and not permanently stored
+- **Secure API**: All endpoints require proper authentication
+- **Privacy First**: User data is handled according to privacy best practices
+- **Local Processing**: Document parsing happens locally for security
 
-### Logs
+## 🧪 Testing
 
-The application logs important events and errors. Check the console output for debugging information.
+Run the test suite to verify system functionality:
+```bash
+python test_hrsd_system.py
+```
 
-## Architecture
-
-1. **Document Processing**: Apache Tika extracts text from uploaded files
-2. **Text Chunking**: Documents are split into overlapping chunks for better retrieval
-3. **Embedding Generation**: Sentence transformers create vector embeddings
-4. **Vector Storage**: Milvus stores embeddings with metadata
-5. **Retrieval**: Semantic search finds relevant document chunks
-6. **Generation**: Groq LLM generates responses using retrieved context
-
-## Contributing
+## 🤝 Contributing
 
 1. Fork the repository
 2. Create a feature branch
@@ -134,6 +181,25 @@ The application logs important events and errors. Check the console output for d
 4. Add tests if applicable
 5. Submit a pull request
 
-## License
+## 📄 License
 
-This project is licensed under the MIT License - see the LICENSE file for details. 
+This project is developed for the Human Resources and Social Development (HRSD) ministry of Saudi Arabia.
+
+## 🆘 Support
+
+For technical support or questions:
+- Check the API documentation at `/docs` endpoint
+- Review the test files for usage examples
+- Contact the development team
+
+## 🔄 Version History
+
+- **v1.0.0**: Initial HRSD Job Matching System release
+  - Complete CV processing and job matching
+  - AI-powered career advice
+  - HRSD-branded React frontend
+  - FastAPI backend with Milvus integration
+
+---
+
+**Powered by Groq AI** 🤖

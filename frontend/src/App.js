@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import FileUpload from './components/FileUpload';
 import JobMatches from './components/JobMatches';
-import ChatInterface from './components/ChatInterface';
-import { uploadCVAndMatch, addSampleJobs } from './services/api';
+import { uploadCVAndMatch } from './services/api';
 
 function App() {
   const [jobMatches, setJobMatches] = useState(null);
@@ -32,26 +31,7 @@ function App() {
     }
   };
 
-  const handleAddSampleJobs = async () => {
-    setLoading(true);
-    setError(null);
-    
-    try {
-      await addSampleJobs();
-      alert('Sample jobs added successfully!');
-    } catch (err) {
-      setError(err.message || 'Failed to add sample jobs');
-    } finally {
-      setLoading(false);
-    }
-  };
 
-  const resetApp = () => {
-    setJobMatches(null);
-    setCvData(null);
-    setAnalysis(null);
-    setError(null);
-  };
 
   return (
     <div className="min-h-screen bg-green-50">
