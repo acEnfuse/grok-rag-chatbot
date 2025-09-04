@@ -17,7 +17,6 @@ const JobMatches = ({ matches, cvData }) => {
             <div key={job.id || index}>
               <div className="bg-white rounded-lg shadow p-6" style={{paddingLeft: '24px', paddingRight: '24px'}}>
                 <div className="mb-2">
-                <br/>
                 <div className="text-gray-800 mb-4" style={{fontSize: '24px', fontWeight: 'bold'}}>
                   {job.job_title || 'Job Title Not Available'}
                 </div>
