@@ -48,7 +48,6 @@ const AIAssistant = ({
   return (
     <div className="max-w-4xl mx-auto">
       <div className="bg-white border border-gray-200 rounded-lg" style={{paddingLeft: '24px', paddingRight: '24px', paddingTop: '24px', paddingBottom: '24px'}}>
-        <br/>
         <h4 className="text-gray-800 mb-4" style={{fontSize: '24px', fontWeight: 'bold'}}>AI Career Assistant</h4>
         <p className="text-gray-600 mb-6">
           Ask me anything about your job matches, career advice, or how to improve your CV based on the opportunities available.
