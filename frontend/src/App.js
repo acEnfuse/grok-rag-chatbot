@@ -28,6 +28,13 @@ function App() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [activeTab, setActiveTab] = useState('job-matches'); // Default to job matches tab
+  
+  // Chat state for AI Assistant - moved up to persist across tab switches
+  const [promptText, setPromptText] = useState('');
+  const [chatResponse, setChatResponse] = useState(null);
+  const [chatLoading, setChatLoading] = useState(false);
+  const [chatError, setChatError] = useState(null);
+  const [chatHistory, setChatHistory] = useState([]);
 
   const handleFileUpload = async (file) => {
     setLoading(true);
@@ -163,6 +170,16 @@ function App() {
                   jobMatches={jobMatches}
                   cvData={cvData}
                   analysis={analysis}
+                  promptText={promptText}
+                  setPromptText={setPromptText}
+                  chatResponse={chatResponse}
+                  setChatResponse={setChatResponse}
+                  chatLoading={chatLoading}
+                  setChatLoading={setChatLoading}
+                  chatError={chatError}
+                  setChatError={setChatError}
+                  chatHistory={chatHistory}
+                  setChatHistory={setChatHistory}
                 />
               )}
             </div>

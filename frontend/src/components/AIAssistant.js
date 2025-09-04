@@ -1,13 +1,22 @@
-import React, { useState } from 'react';
+import React from 'react';
 import ReactMarkdown from 'react-markdown';
 import { chatWithAdvisor } from '../services/api';
 
-const AIAssistant = ({ jobMatches, cvData, analysis }) => {
-  const [promptText, setPromptText] = useState('');
-  const [chatResponse, setChatResponse] = useState(null);
-  const [chatLoading, setChatLoading] = useState(false);
-  const [chatError, setChatError] = useState(null);
-  const [chatHistory, setChatHistory] = useState([]);
+const AIAssistant = ({ 
+  jobMatches, 
+  cvData, 
+  analysis, 
+  promptText, 
+  setPromptText, 
+  chatResponse, 
+  setChatResponse, 
+  chatLoading, 
+  setChatLoading, 
+  chatError, 
+  setChatError, 
+  chatHistory, 
+  setChatHistory 
+}) => {
 
   const handleSendPrompt = async () => {
     if (!promptText.trim()) return;
