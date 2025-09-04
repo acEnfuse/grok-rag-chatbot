@@ -60,6 +60,32 @@ function App() {
       {/* Fixed Header with HRSD Logo */}
       <div style={{position: 'fixed', top: '0', left: '0', right: '0', zIndex: 9999, backgroundColor: 'white', height: '100px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingLeft: '60px', paddingRight: '90px'}}>
         <img src="/hrsd_logo.svg" alt="HRSD Logo" className="hrsd-logo" style={{marginLeft: '20px'}} />
+        
+        {/* Toggle Button - Only show when job matches exist - Absolutely centered */}
+        {jobMatches && (
+          <button
+            onClick={() => setActiveTab(activeTab === 'job-matches' ? 'ai-assistant' : 'job-matches')}
+            style={{
+              position: 'absolute',
+              left: '50%',
+              transform: 'translateX(-50%)',
+              backgroundColor: '#166945',
+              color: 'white',
+              padding: '12px 24px',
+              borderRadius: '8px',
+              border: 'none',
+              fontSize: '16px',
+              fontWeight: 'bold',
+              cursor: 'pointer',
+              transition: 'background-color 0.2s'
+            }}
+            onMouseEnter={(e) => e.target.style.backgroundColor = '#0f4c2a'}
+            onMouseLeave={(e) => e.target.style.backgroundColor = '#166945'}
+          >
+            {activeTab === 'job-matches' ? 'AI Assistant' : 'Job Matches'}
+          </button>
+        )}
+        
         <div style={{display: 'flex', alignItems: 'center', gap: '8px', fontSize: '14px', color: '#6B7280'}}>
           <span>Powered by</span>
           <img src="/Groq_logo.svg" alt="Groq" style={{height: '24px', width: 'auto'}} />
@@ -76,18 +102,7 @@ function App() {
         </div>
       </section>
 
-      {/* Toggle Button */}
-      {jobMatches && (
-        <div className="w-full bg-white py-8 flex justify-center">
-          <button
-            onClick={() => setActiveTab(activeTab === 'job-matches' ? 'ai-assistant' : 'job-matches')}
-            className="text-white transition-colors text-3xl font-bold cursor-pointer" 
-            style={{backgroundColor: '#166945', color: 'white', padding: '24px 48px', borderRadius: '50px', boxShadow: 'none', border: 'none', marginTop: '32px'}}
-          >
-            {activeTab === 'job-matches' ? 'AI Assistant' : 'Job Matches'}
-          </button>
-        </div>
-      )}
+
 
       {/* Main Content */}
       <main className="bg-green-50 py-0 min-h-screen">
