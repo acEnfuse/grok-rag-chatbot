@@ -58,8 +58,8 @@ function App() {
   return (
     <div className="min-h-screen bg-green-50">
       {/* Fixed Header with HRSD Logo */}
-      <div style={{position: 'fixed', top: '0', left: '0', right: '0', zIndex: 9999, backgroundColor: 'white', height: '100px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 90px'}}>
-        <img src="/hrsd_logo.svg" alt="HRSD Logo" className="hrsd-logo" style={{marginLeft: '40px'}} />
+      <div style={{position: 'fixed', top: '0', left: '0', right: '0', zIndex: 9999, backgroundColor: 'white', height: '100px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingLeft: '60px', paddingRight: '90px'}}>
+        <img src="/hrsd_logo.svg" alt="HRSD Logo" className="hrsd-logo" style={{marginLeft: '20px'}} />
         <div style={{display: 'flex', alignItems: 'center', gap: '8px', fontSize: '14px', color: '#6B7280'}}>
           <span>Powered by</span>
           <img src="/Groq_logo.svg" alt="Groq" style={{height: '24px', width: 'auto'}} />
@@ -75,6 +75,19 @@ function App() {
           </div>
         </div>
       </section>
+
+      {/* Toggle Button */}
+      {jobMatches && (
+        <div className="w-full bg-white py-8 flex justify-center">
+          <button
+            onClick={() => setActiveTab(activeTab === 'job-matches' ? 'ai-assistant' : 'job-matches')}
+            className="text-white transition-colors text-3xl font-bold cursor-pointer" 
+            style={{backgroundColor: '#166945', color: 'white', padding: '24px 48px', borderRadius: '50px', boxShadow: 'none', border: 'none', marginTop: '32px'}}
+          >
+            {activeTab === 'job-matches' ? 'AI Assistant' : 'Job Matches'}
+          </button>
+        </div>
+      )}
 
       {/* Main Content */}
       <main className="bg-green-50 py-0 min-h-screen">
@@ -99,35 +112,6 @@ function App() {
           </div>
         ) : (
           <>
-            {/* Tab Navigation - Full Width */}
-            <div className="mb-8">
-              <div className="border-b border-gray-200">
-                <nav className="-mb-px flex">
-                  <button
-                    onClick={() => setActiveTab('job-matches')}
-                    className={`flex-1 py-4 px-6 border-b-2 font-bold text-center ${
-                      activeTab === 'job-matches'
-                        ? 'border-green-600 text-green-600'
-                        : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-                    }`}
-                    style={{fontSize: '16px', fontFamily: 'inherit'}}
-                  >
-                    <strong>Job Matches ({jobMatches.length})</strong>
-                  </button>
-                  <button
-                    onClick={() => setActiveTab('ai-assistant')}
-                    className={`flex-1 py-4 px-6 border-b-2 font-bold text-center ${
-                      activeTab === 'ai-assistant'
-                        ? 'border-green-600 text-green-600'
-                        : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-                    }`}
-                    style={{fontSize: '16px', fontFamily: 'inherit'}}
-                  >
-                    <strong>AI Assistant</strong>
-                  </button>
-                </nav>
-              </div>
-            </div>
 
             <div className="max-w-6xl mx-auto px-6">
 

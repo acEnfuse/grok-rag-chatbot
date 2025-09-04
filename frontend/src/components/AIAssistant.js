@@ -38,7 +38,7 @@ const AIAssistant = ({ jobMatches, cvData, analysis }) => {
 
   return (
     <div className="max-w-4xl mx-auto">
-      <div className="bg-white border border-gray-200 rounded-lg p-6" style={{paddingLeft: '24px', paddingRight: '24px'}}>
+      <div className="bg-white border border-gray-200 rounded-lg" style={{paddingLeft: '24px', paddingRight: '24px', paddingTop: '24px', paddingBottom: '24px'}}>
         <br/>
         <h4 className="text-gray-800 mb-4" style={{fontSize: '24px', fontWeight: 'bold'}}>AI Career Assistant</h4>
         <p className="text-gray-600 mb-6">
@@ -47,7 +47,7 @@ const AIAssistant = ({ jobMatches, cvData, analysis }) => {
 
         {/* Chat History */}
         {chatHistory.length > 0 && (
-          <div className="mb-6">
+          <div className="mb-6" style={{paddingLeft: '48px', paddingRight: '48px'}}>
             {chatHistory.map((message, index) => (
               <div key={index} className="mb-4">
                 {message.role === 'user' ? (
@@ -65,7 +65,7 @@ const AIAssistant = ({ jobMatches, cvData, analysis }) => {
                     <p className="text-sm">{message.content}</p>
                   </div>
                 ) : (
-                  <div className="text-left" style={{paddingLeft: '24px', paddingRight: '24px'}}>
+                  <div className="text-left">
                     <ReactMarkdown
                       components={{
                         h1: ({children}) => <h1 className="text-lg font-bold mb-2 text-gray-800">{children}</h1>,
@@ -98,7 +98,7 @@ const AIAssistant = ({ jobMatches, cvData, analysis }) => {
         )}
 
         {/* Input Area */}
-        <div className="border border-gray-300 rounded-lg p-4">
+        <div className="border border-gray-300 rounded-lg p-4" style={{paddingLeft: '48px', paddingRight: '48px'}}>
           <textarea
             value={promptText}
             onChange={(e) => setPromptText(e.target.value)}
