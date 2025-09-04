@@ -1,38 +1,53 @@
 # HRSD Job Matching System
 
-A comprehensive AI-powered job matching platform for the Human Resources and Social Development (HRSD) ministry of Saudi Arabia. This system helps job seekers find relevant career opportunities by analyzing their CVs and matching them with available positions using advanced semantic search and AI-powered career advice.
+A comprehensive AI-powered job matching platform for the Human Resources and Social Development (HRSD) ministry of Saudi Arabia. This system helps job seekers find relevant career opportunities by analyzing their CVs and matching them with available positions using advanced semantic search, intelligent LLM-based scoring, and AI-powered career advice.
 
 ## 🚀 Features
 
 ### Core Functionality
-- **CV Processing**: Supports multiple file formats (PDF, DOC, DOCX, TXT)
-- **AI-Powered Job Matching**: Uses semantic search to find relevant job opportunities
-- **Career Advice**: Interactive AI assistant powered by Groq LLM
-- **Real-time Analysis**: Instant CV analysis and job matching results
+- **CV Processing**: Supports multiple file formats (PDF, DOC, DOCX, TXT) with advanced text cleaning
+- **AI-Powered Job Matching**: Uses semantic search with LLM-based intelligent rescoring for accurate matches
+- **Interactive Career Assistant**: Real-time AI chat powered by Groq LLM with persistent conversation history
+- **Tabbed Interface**: Seamless switching between job matches and AI assistant with sticky navigation
+- **Real-time Analysis**: Instant CV analysis and job matching results with detailed compatibility scores
 - **Secure Processing**: CV data is processed securely and not stored permanently
+
+### Advanced Features
+- **Intelligent Scoring**: LLM-based job match rescoring for more accurate and logical results
+- **Persistent Chat**: Conversation history persists when switching between tabs
+- **Sticky Navigation**: Always-accessible toggle button in the header for seamless tab switching
+- **Enhanced UI/UX**: Professional design with perfect centering, proper spacing, and responsive layout
+- **Smart Text Processing**: Aggressive regex-based formatting for clean job descriptions and skills
 
 ### Technical Features
 - **Vector Database**: Milvus integration for efficient job opportunity storage and retrieval
-- **Semantic Search**: Advanced embedding-based job matching
-- **Modern UI**: React frontend with HRSD branding and responsive design
-- **RESTful API**: FastAPI backend with comprehensive endpoints
+- **Semantic Search**: Advanced embedding-based job matching with cosine similarity
+- **Modern UI**: React frontend with HRSD branding, responsive design, and professional styling
+- **RESTful API**: FastAPI backend with comprehensive endpoints and Pydantic validation
 - **Document Processing**: Robust text extraction and cleaning from various file formats
+- **LLM Integration**: Groq API integration for intelligent analysis and career advice
 
 ## 🏗️ Architecture
 
 ### Frontend (React)
-- **Components**: FileUpload, JobMatches, ChatInterface
-- **Styling**: Tailwind CSS with HRSD color scheme
-- **State Management**: React hooks for application state
-- **API Integration**: RESTful communication with backend
+- **Components**: 
+  - `FileUpload`: CV upload with drag-and-drop functionality
+  - `JobMatches`: Job results display with enhanced formatting
+  - `AIAssistant`: Interactive chat interface with persistent history
+  - `App`: Main application with tabbed navigation and state management
+- **Styling**: Tailwind CSS with HRSD color scheme and professional design
+- **State Management**: React hooks with persistent chat state across tab switches
+- **API Integration**: RESTful communication with backend using axios
+- **Navigation**: Sticky header with perfectly centered toggle button
 
 ### Backend (FastAPI)
 - **Services**: 
-  - `MilvusService`: Vector database operations
-  - `CVProcessor`: Document parsing and text extraction
-  - `JobEmbedder`: Job opportunity management and embedding
-  - `GroqService`: AI-powered career advice and analysis
-- **Endpoints**: Health checks, CV upload, job matching, chat functionality
+  - `MilvusService`: Vector database operations with LLM-based rescoring
+  - `CVProcessor`: Document parsing and text extraction with advanced cleaning
+  - `JobEmbedder`: Job opportunity management and embedding generation
+  - `GroqService`: AI-powered career advice, analysis, and intelligent job scoring
+- **Endpoints**: Health checks, CV upload, job matching, chat functionality with Pydantic validation
+- **AI Integration**: Groq LLM for intelligent job rescoring and career advice
 
 ### Database (Milvus)
 - **Collection**: `hrsd` - stores job opportunities with embeddings
@@ -146,13 +161,36 @@ The application uses the official HRSD color scheme:
 - `POST /add-jobs` - Bulk add job opportunities
 - `POST /add-sample-jobs` - Add sample job data for testing
 
+## ✨ Recent Improvements
+
+### UI/UX Enhancements
+- **Perfect Centering**: Toggle button in header is now perfectly centered using absolute positioning
+- **Persistent State**: Chat history and conversation state persist when switching between tabs
+- **Professional Design**: Enhanced spacing, indentation, and visual hierarchy throughout the application
+- **Responsive Layout**: Improved mobile and desktop experience with proper padding and margins
+- **Sticky Navigation**: Always-accessible toggle button that stays visible while scrolling
+
+### AI & Matching Improvements
+- **Intelligent Scoring**: LLM-based job match rescoring provides more logical and accurate results
+- **Smart Text Processing**: Advanced regex-based formatting for clean job descriptions and skills display
+- **Enhanced Chat**: Improved AI assistant with better context awareness and response quality
+- **Better Formatting**: Skills are displayed as comma-separated strings for better readability
+
+### Technical Improvements
+- **State Management**: Moved chat state to parent component for better persistence
+- **Code Organization**: Cleaner component structure and better separation of concerns
+- **Performance**: Optimized rendering and state updates for smoother user experience
+- **Error Handling**: Improved error handling and user feedback throughout the application
+
 ## 🎯 Usage
 
 ### For Job Seekers
 1. **Upload CV**: Drag and drop or browse to upload your CV
-2. **Get Matches**: System analyzes your CV and finds matching job opportunities
-3. **AI Advice**: Ask questions about your career or job opportunities
-4. **Review Results**: View detailed job matches with compatibility scores
+2. **View Job Matches**: System analyzes your CV and displays matching job opportunities with intelligent scoring
+3. **Switch to AI Assistant**: Click the toggle button in the header to access the AI career advisor
+4. **Ask Questions**: Get personalized career advice, CV improvement tips, and job match explanations
+5. **Switch Back**: Toggle between job matches and AI assistant - your conversation history persists
+6. **Review Results**: View detailed job matches with compatibility scores, required skills, and descriptions
 
 ### For Administrators
 1. **Add Jobs**: Use API endpoints to add new job opportunities
@@ -193,6 +231,15 @@ For technical support or questions:
 - Contact the development team
 
 ## 🔄 Version History
+
+- **v2.0.0**: Major UI/UX and AI Enhancement Release
+  - **Tabbed Interface**: Seamless switching between job matches and AI assistant
+  - **Persistent Chat**: Conversation history persists across tab switches
+  - **Sticky Navigation**: Always-accessible toggle button in header with perfect centering
+  - **LLM-Based Scoring**: Intelligent job match rescoring for more accurate results
+  - **Enhanced UI**: Professional design with proper spacing, indentation, and responsive layout
+  - **Smart Text Processing**: Advanced regex-based formatting for clean job descriptions and skills
+  - **Improved UX**: Better file upload, scroll-to-top, and overall user experience
 
 - **v1.0.0**: Initial HRSD Job Matching System release
   - Complete CV processing and job matching
